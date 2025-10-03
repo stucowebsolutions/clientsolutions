@@ -23,7 +23,7 @@ chatButton.style.setProperty("bottom", "20px", "important");
 chatButton.style.setProperty("right", "20px", "important");
 chatButton.style.setProperty("z-index", "999999", "important");
 
-document.body.appendChild(chatButton);
+document.documentElement.appendChild(chatButton);
 
 // ----------------------------
 // CREATE CHAT WINDOW
@@ -48,7 +48,7 @@ chatWindow.style.setProperty("bottom", "90px", "important");
 chatWindow.style.setProperty("right", "20px", "important");
 chatWindow.style.setProperty("z-index", "100000", "important");
 
-document.body.appendChild(chatWindow);
+document.documentElement.appendChild(chatWindow);
   // ----------------------------
   // CHAT CONTENT AREA
   // ----------------------------
