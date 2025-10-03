@@ -1,49 +1,54 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // ----------------------------
-  // STYLE CONFIG
-  // ----------------------------
-  const bubbleImage = "https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/assets/chat-icon.png";
+// ----------------------------
+// STYLE CONFIG
+// ----------------------------
+const bubbleImage = "https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/assets/chat-icon.png";
 
-  // ----------------------------
-  // CREATE CHAT BUTTON
-  // ----------------------------
-  const chatButton = document.createElement("div");
-  chatButton.style.cssText = `
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    background: #fff url(${bubbleImage}) center/cover no-repeat;
-    border-radius: 50%;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    cursor: pointer;
-    z-index: 9999;
-  `;
-  document.body.appendChild(chatButton);
+// ----------------------------
+// CREATE CHAT BUTTON
+// ----------------------------
+const chatButton = document.createElement("div");
 
-  // ----------------------------
-  // CREATE CHAT WINDOW
-  // ----------------------------
-  const chatWindow = document.createElement("div");
-  chatWindow.style.cssText = `
-    display: none;
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    width: 320px;
-    height: 420px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.25);
-    overflow: hidden;
-    z-index: 10000;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-  `;
-  document.body.appendChild(chatWindow);
+// base styles (non-critical can stay here)
+chatButton.style.width = "60px";
+chatButton.style.height = "60px";
+chatButton.style.background = `#fff url(${bubbleImage}) center/cover no-repeat`;
+chatButton.style.borderRadius = "50%";
+chatButton.style.boxShadow = "0 4px 8px rgba(0,0,0,0.3)";
+chatButton.style.cursor = "pointer";
 
+// critical positioning styles forced with !important
+chatButton.style.setProperty("position", "fixed", "important");
+chatButton.style.setProperty("bottom", "20px", "important");
+chatButton.style.setProperty("right", "20px", "important");
+chatButton.style.setProperty("z-index", "999999", "important");
+
+document.body.appendChild(chatButton);
+
+// ----------------------------
+// CREATE CHAT WINDOW
+// ----------------------------
+const chatWindow = document.createElement("div");
+
+// base styles
+chatWindow.style.display = "none";
+chatWindow.style.width = "320px";
+chatWindow.style.height = "420px";
+chatWindow.style.background = "#fff";
+chatWindow.style.borderRadius = "12px";
+chatWindow.style.boxShadow = "0 6px 12px rgba(0,0,0,0.25)";
+chatWindow.style.overflow = "hidden";
+chatWindow.style.fontFamily = "Arial, sans-serif";
+chatWindow.style.display = "flex";
+chatWindow.style.flexDirection = "column";
+
+// critical positioning styles forced with !important
+chatWindow.style.setProperty("position", "fixed", "important");
+chatWindow.style.setProperty("bottom", "90px", "important");
+chatWindow.style.setProperty("right", "20px", "important");
+chatWindow.style.setProperty("z-index", "100000", "important");
+
+document.body.appendChild(chatWindow);
   // ----------------------------
   // CHAT CONTENT AREA
   // ----------------------------
