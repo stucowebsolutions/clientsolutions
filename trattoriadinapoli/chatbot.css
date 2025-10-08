@@ -6,7 +6,7 @@ body {
 
 #chatbot-banner {
   display: flex;
-  background: #fff url('https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/assets/chat-icon.png')
+  background: #fff url('https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/assets/chat-icon.png');
   justify-content: center;
   padding: 10px;
 }
