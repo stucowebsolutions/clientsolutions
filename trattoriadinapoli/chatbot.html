@@ -1,210 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Restaurant Chatbot</title>
-<style>
-  /* Basic reset */
-  body, html { margin: 0; padding: 0; height: 100%; font-family: Arial, sans-serif; }
-
-  /* Chat bubble button */
-  #chatButton {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    background: #fff url('assets/chat-icon.png') center/cover no-repeat;
-    border-radius: 50%;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-    cursor: pointer;
-    z-index: 9999;
-  }
-
-  /* Chat window */
-  #chatWindow {
-    display: none;
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    width: 320px;
-    height: 420px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.25);
-    overflow: hidden;
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-  }
-
-  #chatHeader {
-    background: #e63946;
-    color: white;
-    padding: 10px;
-    font-weight: bold;
-    text-align: center;
-  }
-
-  #chatLog {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
-    font-size: 14px;
-  }
-
-  #chatInputContainer {
-    display: flex;
-    border-top: 1px solid #ddd;
-    padding: 6px;
-  }
-
-  #chatInput {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-
-  #chatSend {
-    margin-left: 6px;
-    background: #e63946;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 0 12px;
-    cursor: pointer;
-  }
-
-  #liveChatBtn {
-    margin-top: 6px;
-    background: #444;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 10px;
-    cursor: pointer;
-    font-size: 13px;
-    width: 100%;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot</title>
+  <link rel="stylesheet" href="chatbot.css">
 </head>
 <body>
-
-<!-- Chat button -->
-<div id="chatButton"></div>
-
-<!-- Chat window -->
-<div id="chatWindow">
-  <div id="chatHeader">Restaurant Assistant</div>
-  <div id="chatLog"></div>
-  <div id="chatInputContainer">
-    <input type="text" id="chatInput" placeholder="Type your question..." />
-    <button id="chatSend">Send</button>
+  <!-- Banner button -->
+  <div id="chatbot-banner">
+    <button id="chatbot-toggle"></button>
   </div>
-  <button id="liveChatBtn">Switch to Live Chat</button>
-</div>
 
-<script>
-  // FAQ data
-  const faqs = [
-    { q: /(reservation|book|table)/i,
-      a: [
-        "Reservations aren't required.",
-        "They are available through our homepage or by calling us.",
-        "Reservations are recommended during peak hours."
-      ]},
-    { q: /(dress code)/i, a: ["No dress code."] },
-    { q: /(hour|open|close)/i, a: ["Tue–Thu: 11am–9pm", "Fri/Sat: 11am–10pm"] },
-    { q: /(menu)/i, a: ["Our menus can be viewed using the navigation links.", "We have both a lunch and a dinner menu."] },
-    { q: /(delivery|deliver)/i, a: ["We do not deliver.", "We do offer to-go orders."] },
-    { q: /(gift card)/i, a: ["Gift card purchases can be made by calling us."] },
-    { q: /(gluten)/i, a: ["We have gluten-free pasta and salad options.", "We also offer non-breaded chicken."] },
-    { q: /(vegetarian|veggie)/i, a: ["We offer a vegetarian pizza and several salads."] },
-    { q: /(allergen|allergy|safe)/i, a: ["We try to accommodate allergies as much as possible."] },
-    { q: /(cater|catering)/i, a: [
-      "Yes, we do catering.",
-      "Our catering menu can be viewed on our website.",
-      "Requests can be made via the website, by calling us, or by email."
-    ]}
-  ];
+  <!-- Chat window -->
+  <div id="chatbot-container" style="display: none;">
+    <div id="chatbot-header">Chat with Us</div>
+    <div id="chatbot-body"></div>
+    <div id="chatbot-input">
+      <input type="text" id="userInput" placeholder="Ask a question...">
+      <button id="sendBtn">Send</button>
+    </div>
+    <div id="humanChatBtnContainer" style="text-align:center; padding:8px;">
+      <button id="humanChatBtn">Speak with a human</button>
+    </div>
+  </div>
 
-  // DOM elements
-  const chatButton = document.getElementById('chatButton');
-  const chatWindow = document.getElementById('chatWindow');
-  const chatLog = document.getElementById('chatLog');
-  const chatInput = document.getElementById('chatInput');
-  const chatSend = document.getElementById('chatSend');
-  const liveChatBtn = document.getElementById('liveChatBtn');
-
-  // Append message
-  function appendMessage(sender, text) {
-    const msg = document.createElement("div");
-    msg.style.margin = "6px 0";
-    msg.style.padding = "8px 10px";
-    msg.style.borderRadius = "8px";
-    msg.style.maxWidth = "80%";
-    msg.style.wordWrap = "break-word";
-    if (sender === "user") {
-      msg.style.background = "#e63946";
-      msg.style.color = "white";
-      msg.style.marginLeft = "auto";
-    } else {
-      msg.style.background = "#f1f1f1";
-      msg.style.color = "#000";
-      msg.style.marginRight = "auto";
-    }
-    msg.innerText = text;
-    chatLog.appendChild(msg);
-    chatLog.scrollTop = chatLog.scrollHeight;
-  }
-
-  // Bot reply (supports splitting long answers)
-  function botReply(messages, i = 0) {
-    if (i >= messages.length) return;
-    setTimeout(() => {
-      appendMessage("bot", messages[i]);
-      botReply(messages, i + 1);
-    }, i === 0 ? 300 : 1000);
-  }
-
-  function handleUserInput() {
-    const text = chatInput.value.trim();
-    if (!text) return;
-    appendMessage("user", text);
-    chatInput.value = "";
-
-    let answered = false;
-    for (const faq of faqs) {
-      if (faq.q.test(text)) {
-        botReply(faq.a);
-        answered = true;
-        break;
-      }
-    }
-    if (!answered) {
-      botReply(["I'm not sure about that. You can switch to Live Chat below."]);
-    }
-  }
-
-  // Event listeners
-  chatButton.addEventListener("click", () => {
-    chatWindow.style.display = chatWindow.style.display === "none" ? "flex" : "none";
-  });
-
-  chatSend.addEventListener("click", handleUserInput);
-  chatInput.addEventListener("keypress", e => { if (e.key === "Enter") handleUserInput(); });
-
-  liveChatBtn.addEventListener("click", () => {
-    chatWindow.innerHTML = `
-      <iframe src="https://example.com/godaddy-livechat"
-        style="width:100%; height:100%; border:none;"></iframe>
-    `;
-  });
-
-  // Initial greeting
-  botReply(["Hi! I’m your assistant. Ask me about reservations, hours, menu, or catering."]);
-</script>
+  <script src="chatbot.js"></script>
 </body>
 </html>
