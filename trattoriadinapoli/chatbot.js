@@ -1,179 +1,64 @@
-document.addEventListener("DOMContentLoaded", () => {
-// ----------------------------
-// STYLE CONFIG
-// ----------------------------
-const bubbleImage = "https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/assets/chat-icon.png";
+const toggleBtn = document.getElementById('chatbot-toggle');
+const chatContainer = document.getElementById('chatbot-container');
+const chatBody = document.getElementById('chatbot-body');
+const userInput = document.getElementById('userInput');
+const sendBtn = document.getElementById('sendBtn');
+const humanChatBtn = document.getElementById('humanChatBtn');
 
-// ----------------------------
-// CREATE CHAT BUTTON
-// ----------------------------
-const chatButton = document.createElement("div");
-
-// base styles (non-critical can stay here)
-chatButton.style.width = "60px";
-chatButton.style.height = "60px";
-chatButton.style.background = `#fff url(${bubbleImage}) center/cover no-repeat`;
-chatButton.style.borderRadius = "50%";
-chatButton.style.boxShadow = "0 4px 8px rgba(0,0,0,0.3)";
-chatButton.style.cursor = "pointer";
-
-// critical positioning styles forced with !important
-chatButton.style.setProperty("position", "fixed", "important");
-chatButton.style.setProperty("bottom", "20px", "important");
-chatButton.style.setProperty("right", "20px", "important");
-chatButton.style.setProperty("z-index", "999999", "important");
-
-document.documentElement.appendChild(chatButton);
-
-// ----------------------------
-// CREATE CHAT WINDOW
-// ----------------------------
-const chatWindow = document.createElement("div");
-
-// base styles
-chatWindow.style.display = "none";
-chatWindow.style.width = "320px";
-chatWindow.style.height = "420px";
-chatWindow.style.background = "#fff";
-chatWindow.style.borderRadius = "12px";
-chatWindow.style.boxShadow = "0 6px 12px rgba(0,0,0,0.25)";
-chatWindow.style.overflow = "hidden";
-chatWindow.style.fontFamily = "Arial, sans-serif";
-chatWindow.style.display = "flex";
-chatWindow.style.flexDirection = "column";
-
-// critical positioning styles forced with !important
-chatWindow.style.setProperty("position", "fixed", "important");
-chatWindow.style.setProperty("bottom", "90px", "important");
-chatWindow.style.setProperty("right", "20px", "important");
-chatWindow.style.setProperty("z-index", "100000", "important");
-
-document.documentElement.appendChild(chatWindow);
-  // ----------------------------
-  // CHAT CONTENT AREA
-  // ----------------------------
-  chatWindow.innerHTML = `
-    <div style="background:#e63946; color:white; padding:10px; font-weight:bold; font-size:16px; text-align:center;">
-      Restaurant Assistant
-    </div>
-    <div id="chatLog" style="flex:1; padding:10px; overflow-y:auto; font-size:14px;"></div>
-    <div style="padding:6px; border-top:1px solid #ddd; display:flex;">
-      <input id="chatInput" type="text" placeholder="Type your question..." 
-        style="flex:1; padding:8px; border:1px solid #ccc; border-radius:6px;" />
-      <button id="chatSend" style="margin-left:6px; background:#e63946; color:white; border:none; border-radius:6px; padding:0 12px; cursor:pointer;">
-        Send
-      </button>
-    </div>
-    <div style="padding:6px; border-top:1px solid #ddd; text-align:center;">
-      <button id="liveChatBtn" style="background:#444; color:white; border:none; border-radius:6px; padding:6px 10px; cursor:pointer; font-size:13px;">
-        Switch to Live Chat
-      </button>
-    </div>
-  `;
-
-  const chatLog = chatWindow.querySelector("#chatLog");
-  const chatInput = chatWindow.querySelector("#chatInput");
-  const chatSend = chatWindow.querySelector("#chatSend");
-  const liveChatBtn = chatWindow.querySelector("#liveChatBtn");
-
-  // ----------------------------
-  // FAQ DATA
-  // ----------------------------
-  const faqs = [
-    { q: /(reservation|book|table)/i,
-      a: [
-        "Reservations aren't required.",
-        "They are available through our homepage or by calling us.",
-        "Reservations are recommended during peak hours."
-      ]},
-    { q: /(dress code)/i, a: ["No dress code."] },
-    { q: /(hour|open|close)/i, a: ["Tue–Thu: 11am–9pm", "Fri/Sat: 11am–10pm"] },
-    { q: /(menu)/i, a: ["Our menus can be viewed using the navigation links.", "We have both a lunch and a dinner menu."] },
-    { q: /(delivery|deliver)/i, a: ["We do not deliver.", "We do offer to-go orders."] },
-    { q: /(gift card)/i, a: ["Gift card purchases can be made by calling us."] },
-    { q: /(gluten)/i, a: ["We have gluten-free pasta and salad options.", "We also offer non-breaded chicken."] },
-    { q: /(vegetarian|veggie)/i, a: ["We offer a vegetarian pizza and several salads."] },
-    { q: /(allergen|allergy|safe)/i, a: ["We try to accommodate allergies as much as possible."] },
-    { q: /(cater|catering)/i, a: [
-      "Yes, we do catering.",
-      "Our catering menu can be viewed on our website.",
-      "Requests can be made via the website, by calling us, or by email."
-    ]}
-  ];
-
-  // ----------------------------
-  // FUNCTIONS
-  // ----------------------------
-  function appendMessage(sender, text) {
-    const msg = document.createElement("div");
-    msg.style.margin = "6px 0";
-    msg.style.padding = "8px 10px";
-    msg.style.borderRadius = "8px";
-    msg.style.maxWidth = "80%";
-    msg.style.wordWrap = "break-word";
-    if (sender === "user") {
-      msg.style.background = "#e63946";
-      msg.style.color = "white";
-      msg.style.marginLeft = "auto";
-      msg.innerText = text;
-    } else {
-      msg.style.background = "#f1f1f1";
-      msg.style.color = "#000";
-      msg.style.marginRight = "auto";
-      msg.innerText = text;
-    }
-    chatLog.appendChild(msg);
-    chatLog.scrollTop = chatLog.scrollHeight; // auto-scroll
-  }
-
-  function botReply(messages, i = 0) {
-    if (i >= messages.length) return;
-    setTimeout(() => {
-      appendMessage("bot", messages[i]);
-      botReply(messages, i + 1);
-    }, i === 0 ? 300 : 1000); // first immediate, next with delay
-  }
-
-  function handleUserInput() {
-    const text = chatInput.value.trim();
-    if (!text) return;
-    appendMessage("user", text);
-    chatInput.value = "";
-
-    let answered = false;
-    for (const faq of faqs) {
-      if (faq.q.test(text)) {
-        botReply(faq.a);
-        answered = true;
-        break;
-      }
-    }
-    if (!answered) {
-      botReply(["I'm not sure about that. You can switch to Live Chat below."]);
-    }
-  }
-
-  // ----------------------------
-  // EVENT LISTENERS
-  // ----------------------------
-  chatButton.addEventListener("click", () => {
-    chatWindow.style.display = chatWindow.style.display === "none" ? "flex" : "none";
-  });
-
-  chatSend.addEventListener("click", handleUserInput);
-  chatInput.addEventListener("keypress", e => {
-    if (e.key === "Enter") handleUserInput();
-  });
-
-  liveChatBtn.addEventListener("click", () => {
-    chatWindow.innerHTML = `
-      <iframe src="https://example.com/godaddy-livechat" 
-        style="width:100%; height:100%; border:none;"></iframe>
-    `;
-  });
-
-  // ----------------------------
-  // INITIAL GREETING
-  // ----------------------------
-  botReply(["Hi! I’m your assistant. Ask me about reservations, hours, menu, or catering."]);
+toggleBtn.addEventListener('click', () => {
+  toggleBtn.style.display = 'none';
+  chatContainer.style.display = 'block';
 });
+
+function addMessage(sender, text) {
+  const msg = document.createElement('div');
+  msg.style.margin = '8px 0';
+  msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+  chatBody.appendChild(msg);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+sendBtn.addEventListener('click', () => handleInput());
+userInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') handleInput();
+});
+
+humanChatBtn.addEventListener('click', () => {
+  // Hide chatbot iframe
+  if (parent && parent.showHumanChat) {
+    parent.showHumanChat();
+  }
+});
+
+function handleInput() {
+  const text = userInput.value.trim();
+  if (!text) return;
+  addMessage('You', text);
+  userInput.value = '';
+
+  setTimeout(() => {
+    const response = getResponse(text);
+    addMessage('Trattoria Bot', response.text);
+    if (response.triggerHuman && parent && parent.showHumanChat) {
+      setTimeout(() => parent.showHumanChat(), 800);
+    }
+  }, 700);
+}
+
+function getResponse(input) {
+  const msg = input.toLowerCase();
+
+  if (msg.includes('reservation')) return { text: "Reservations aren't required, but you can make one on our homepage or by calling us. Recommended during busy hours!", triggerHuman: false };
+  if (msg.includes('dress')) return { text: "No dress code here — come as you are!", triggerHuman: false };
+  if (msg.includes('hours')) return { text: "We're open Tue–Thu 11am–9pm, and Fri/Sat 11am–10pm.", triggerHuman: false };
+  if (msg.includes('menu')) return { text: "Check out our lunch and dinner menus through the navigation links.", triggerHuman: false };
+  if (msg.includes('delivery')) return { text: "We don't deliver, but we do offer to-go orders!", triggerHuman: false };
+  if (msg.includes('gift')) return { text: "Gift cards can be purchased by calling us directly.", triggerHuman: false };
+  if (msg.includes('gluten')) return { text: "Gluten-free pasta, salads, and non-breaded chicken are available.", triggerHuman: false };
+  if (msg.includes('vegetarian')) return { text: "We offer a vegetarian pizza and several salad options!", triggerHuman: false };
+  if (msg.includes('allergy') || msg.includes('allergen')) return { text: "We do our best to accommodate allergies — just let your server know.", triggerHuman: false };
+  if (msg.includes('cater')) return { text: "Yes, we cater! Requests can be made online, by phone, or by email.", triggerHuman: false };
+  if (msg.includes('human')) return { text: "Sure thing — connecting you with a human now!", triggerHuman: true };
+
+  return { text: "I’m not sure about that, but I can connect you with a team member if you'd like.", triggerHuman: true };
+}
