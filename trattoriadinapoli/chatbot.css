@@ -18,6 +18,8 @@ body {
 /* Chat toggle button */
 #chatbot-toggle {
   background: #b62828;
+  width: 400px;
+  height: 200px;
   color: #fff;
   border: none;
   border-radius: 25px;
@@ -37,8 +39,8 @@ body {
 /* Chat window styling */
 #chatbot-container {
   width: 90%;
-  max-width: 380px;
-  height: 520px;
+  max-width: 400px;
+  height: 620px;
   background: #f9f9f9;
   border-radius: 16px;
   border: 1px solid #ccc;
