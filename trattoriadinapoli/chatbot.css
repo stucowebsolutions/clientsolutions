@@ -2,33 +2,38 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: transparent;
+  text-align: center;
 }
 
+/* --- Toggle Button --- */
 #chatbot-banner {
   display: flex;
-  background: #fff url('https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/assets/chat-icon.png');
   justify-content: center;
-  padding: 10px;
+  align-items: center;
+  padding: 20px;
 }
 
 #chatbot-toggle {
-  width: 180px;
-  height: 50px;
+  width: 200px;
+  height: 100px;
   background: #fff url('https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/assets/chat-icon.png') center/cover no-repeat;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
   border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   cursor: pointer;
 }
 
+/* --- Chat Window --- */
 #chatbot-container {
-  width: 100%;
-  max-width: 360px;
-  border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-  overflow: hidden;
-  border: 1px solid #ccc;
+  width: 300px;
+  height: 600px;
   margin: 0 auto;
+  background: #dcdcdc;
+  border: 5px solid #000;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 #chatbot-header {
@@ -39,32 +44,44 @@ body {
 }
 
 #chatbot-body {
-  background: #fff;
-  height: 320px;
+  flex: 1;
   overflow-y: auto;
   padding: 10px;
+  text-align: left;
 }
 
+/* --- Input Section --- */
 #chatbot-input {
   display: flex;
-  border-top: 1px solid #ddd;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  padding: 10px;
+  gap: 10px;
 }
 
 #chatbot-input input {
-  flex: 1;
-  padding: 8px;
+  width: 60px;
+  height: 20px;
+  background: #fff;
+  border-radius: 8px;
   border: none;
+  padding: 5px;
   outline: none;
 }
 
 #chatbot-input button {
-  background: #b62828;
+  width: 30px;
+  height: 20px;
+  background: #007bff;
   color: #fff;
   border: none;
-  padding: 0 16px;
+  border-radius: 8px;
+  padding: 5px;
   cursor: pointer;
 }
 
+/* --- Speak with Human Button --- */
 #humanChatBtn {
   background: #444;
   color: #fff;
