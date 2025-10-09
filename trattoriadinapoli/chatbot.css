@@ -11,6 +11,11 @@ body {
 
 /* Banner container */
 #chatbot-banner {
+  display: flex;
+  justify-content: center;   /* horizontal centering */
+  align-items: center;       /* vertical centering */
+  height: 60vh;              /* occupies 60% of the section height, tweak as needed */
+  background: transparent;   /* no extra color */
   text-align: center;
   margin-top: 20px;
 }
@@ -18,8 +23,8 @@ body {
 /* Chat toggle button */
 #chatbot-toggle {
   background: #b62828;
-  width: 900px;
-  height: 200px;
+  width: 400px;
+  height: 180px;
   color: #fff;
   border: none;
   padding: 14px 28px;
