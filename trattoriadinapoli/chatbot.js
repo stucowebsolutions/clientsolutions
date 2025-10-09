@@ -4,27 +4,32 @@ const chatBody = document.getElementById('chatbot-body');
 const userInput = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
 const humanChatBtn = document.getElementById('humanChatBtn');
+const closeBtn = document.getElementById('chatbot-close');
 
 toggleBtn.addEventListener('click', () => {
   toggleBtn.style.display = 'none';
-  chatContainer.style.display = 'block';
+  chatContainer.style.display = 'flex';
+});
+
+closeBtn.addEventListener('click', () => {
+  chatContainer.style.display = 'none';
+  toggleBtn.style.display = 'block';
 });
 
 function addMessage(sender, text) {
   const msg = document.createElement('div');
-  msg.style.margin = '8px 0';
-  msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+  msg.classList.add('message', sender === 'You' ? 'user' : 'bot');
+  msg.textContent = text;
   chatBody.appendChild(msg);
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-sendBtn.addEventListener('click', () => handleInput());
+sendBtn.addEventListener('click', handleInput);
 userInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') handleInput();
 });
 
 humanChatBtn.addEventListener('click', () => {
-  // Hide chatbot iframe
   if (parent && parent.showHumanChat) {
     parent.showHumanChat();
   }
@@ -38,7 +43,7 @@ function handleInput() {
 
   setTimeout(() => {
     const response = getResponse(text);
-    addMessage('Trattoria Bot', response.text);
+    addMessage('Bot', response.text);
     if (response.triggerHuman && parent && parent.showHumanChat) {
       setTimeout(() => parent.showHumanChat(), 800);
     }
