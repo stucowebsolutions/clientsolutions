@@ -3,45 +3,51 @@ body {
   margin: 0;
   font-family: 'Arial', sans-serif;
   background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-/* Floating chat toggle button */
+/* Banner container */
+#chatbot-banner {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Chat toggle button */
 #chatbot-toggle {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
   background: #b62828;
   color: #fff;
   border: none;
-  font-size: 26px;
+  border-radius: 25px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 #chatbot-toggle:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  background: #a11f1f;
+  transform: scale(1.03);
 }
 
-/* Chat container */
+/* Chat window styling */
 #chatbot-container {
-  position: fixed;
-  bottom: 100px;
-  right: 24px;
-  width: 320px;
-  max-height: 480px;
+  width: 90%;
+  max-width: 380px;
+  height: 520px;
   background: #f9f9f9;
   border-radius: 16px;
   border: 1px solid #ccc;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  margin-top: 20px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: fadeInUp 0.3s ease;
+  animation: fadeIn 0.3s ease;
 }
 
 /* Header bar */
@@ -61,9 +67,11 @@ body {
   color: white;
   font-size: 22px;
   cursor: pointer;
+  padding: 0;
+  line-height: 1;
 }
 
-/* Chat body */
+/* Chat body (scroll area) */
 #chatbot-body {
   flex: 1;
   padding: 12px;
@@ -81,6 +89,7 @@ body {
   border-radius: 14px;
   font-size: 14px;
   line-height: 1.4;
+  word-wrap: break-word;
 }
 
 .message.user {
@@ -129,7 +138,7 @@ body {
 /* Human chat button */
 #humanChatBtnContainer {
   text-align: center;
-  padding: 8px;
+  padding: 10px;
   background: #f7f7f7;
   border-top: 1px solid #ddd;
 }
@@ -149,22 +158,15 @@ body {
 }
 
 /* Fade animation */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 480px) {
   #chatbot-container {
-    width: 90%;
-    right: 5%;
-    bottom: 90px;
+    width: 95%;
+    height: 480px;
   }
 }
