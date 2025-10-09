@@ -7,20 +7,27 @@
   <link rel="stylesheet" href="https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/chatbot.css">
 </head>
 <body>
-  <!-- Banner button -->
-  <div id="chatbot-banner">
-    <button id="chatbot-toggle"></button>
-  </div>
+
+  <!-- Floating chat toggle button -->
+  <button id="chatbot-toggle">
+    💬
+  </button>
 
   <!-- Chat window -->
   <div id="chatbot-container" style="display: none;">
-    <div id="chatbot-header">Chat with Us</div>
+    <div id="chatbot-header">
+      <span>Trattoria Bot</span>
+      <button id="chatbot-close">×</button>
+    </div>
+
     <div id="chatbot-body"></div>
+
     <div id="chatbot-input">
-      <input type="text" id="userInput" placeholder="Ask a question...">
+      <input type="text" id="userInput" placeholder="Type a message...">
       <button id="sendBtn">Send</button>
     </div>
-    <div id="humanChatBtnContainer" style="text-align:center; padding:8px;">
+
+    <div id="humanChatBtnContainer">
       <button id="humanChatBtn">Speak with a human</button>
     </div>
   </div>
