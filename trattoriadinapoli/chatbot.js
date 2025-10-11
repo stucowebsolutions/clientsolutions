@@ -35,6 +35,8 @@ humanChatBtn.addEventListener('click', () => {
   }
 });
 
+// --- NEW Robust Response Logic ---
+
 function handleInput() {
   const text = userInput.value.trim();
   if (!text) return;
@@ -47,23 +49,67 @@ function handleInput() {
     if (response.triggerHuman && parent && parent.showHumanChat) {
       setTimeout(() => parent.showHumanChat(), 800);
     }
-  }, 700);
+  }, 600);
+}
+
+// helper to check if message includes any variation
+function matches(input, keywords) {
+  return keywords.some(keyword => input.includes(keyword));
+}
+
+function normalize(str) {
+  return str.toLowerCase()
+            .replace(/[^\w\s]/gi, '') // remove punctuation
+            .replace(/\s+/g, ' ')     // normalize spaces
+            .trim();
 }
 
 function getResponse(input) {
-  const msg = input.toLowerCase();
+  const msg = normalize(input);
 
-  if (msg.includes('reservation')) return { text: "Reservations aren't required, but you can make one on our homepage or by calling us. Recommended during busy hours!", triggerHuman: false };
-  if (msg.includes('dress')) return { text: "No dress code here — come as you are!", triggerHuman: false };
-  if (msg.includes('hours')) return { text: "We're open Tue–Thu 11am–9pm, and Fri/Sat 11am–10pm.", triggerHuman: false };
-  if (msg.includes('menu')) return { text: "Check out our lunch and dinner menus through the navigation links.", triggerHuman: false };
-  if (msg.includes('delivery')) return { text: "We don't deliver, but we do offer to-go orders!", triggerHuman: false };
-  if (msg.includes('gift')) return { text: "Gift cards can be purchased by calling us directly.", triggerHuman: false };
-  if (msg.includes('gluten')) return { text: "Gluten-free pasta, salads, and non-breaded chicken are available.", triggerHuman: false };
-  if (msg.includes('vegetarian')) return { text: "We offer a vegetarian pizza and several salad options!", triggerHuman: false };
-  if (msg.includes('allergy') || msg.includes('allergen')) return { text: "We do our best to accommodate allergies — just let your server know.", triggerHuman: false };
-  if (msg.includes('cater')) return { text: "Yes, we cater! Requests can be made online, by phone, or by email.", triggerHuman: false };
-  if (msg.includes('human')) return { text: "Sure thing — connecting you with a human now!", triggerHuman: true };
+  if (matches(msg, ['reservation', 'reserve', 'book table', 'booking'])) {
+    return { text: "Reservations aren't required, but you can make one on our homepage or by calling us. Recommended during busy hours!", triggerHuman: false };
+  }
+
+  if (matches(msg, ['dress', 'attire', 'clothing', 'what to wear'])) {
+    return { text: "No dress code here — come as you are!", triggerHuman: false };
+  }
+
+  if (matches(msg, ['hour', 'open', 'close', 'when are you open', 'time'])) {
+    return { text: "We're open Tue–Thu 11am–9pm, and Fri/Sat 11am–10pm.", triggerHuman: false };
+  }
+
+  if (matches(msg, ['menu', 'food', 'dishes', 'what do you serve'])) {
+    return { text: "Check out our lunch and dinner menus through the navigation links.", triggerHuman: false };
+  }
+
+  if (matches(msg, ['delivery', 'deliver', 'doordash', 'uber eats'])) {
+    return { text: "We don't deliver, but we do offer to-go orders!", triggerHuman: false };
+  }
+
+  if (matches(msg, ['gift', 'giftcard', 'gift card', 'voucher'])) {
+    return { text: "Gift cards can be purchased by calling us directly.", triggerHuman: false };
+  }
+
+  if (matches(msg, ['gluten', 'celiac', 'wheat'])) {
+    return { text: "Gluten-free pasta, salads, and non-breaded chicken are available.", triggerHuman: false };
+  }
+
+  if (matches(msg, ['vegetarian', 'veggie', 'plant based'])) {
+    return { text: "We offer a vegetarian pizza and several salad options!", triggerHuman: false };
+  }
+
+  if (matches(msg, ['allergy', 'allergies', 'allergen', 'nuts', 'dairy free'])) {
+    return { text: "We do our best to accommodate allergies — just let your server know.", triggerHuman: false };
+  }
+
+  if (matches(msg, ['cater', 'catering', 'event', 'party tray', 'banquet'])) {
+    return { text: "Yes, we cater! Requests can be made online, by phone, or by email.", triggerHuman: false };
+  }
+
+  if (matches(msg, ['human', 'person', 'representative', 'staff', 'employee'])) {
+    return { text: "Sure thing — connecting you with a human now!", triggerHuman: true };
+  }
 
   return { text: "I’m not sure about that, but I can connect you with a team member if you'd like.", triggerHuman: true };
 }
