@@ -11,9 +11,9 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  height: 600px;
+  height: 400px;
   width: 90%;
-  max-width: 1000px;
+  max-width: 900px;
   margin: 60px auto;
   padding: 20px;
   border-radius: 18px;
@@ -43,7 +43,7 @@ body {
 }
 
 #chatbot-image {
-  width: 150px;
+  width: 300px;
   height: auto;
 }
 
