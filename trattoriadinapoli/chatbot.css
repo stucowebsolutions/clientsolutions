@@ -1,4 +1,4 @@
-/* General reset */
+/* General Reset */
 body {
   margin: 0;
   font-family: "Arial", sans-serif;
@@ -9,55 +9,58 @@ body {
 #chatbot-banner {
   position: relative;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  height: 700px;
-  max-height: 500px;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 600px;
   width: 90%;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 60px auto;
-  padding: 20px 30px;
+  padding: 20px;
   border-radius: 18px;
   background: linear-gradient(135deg, #b62828, #e74c3c);
   color: #fff;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
   overflow: hidden;
 }
 
-/* === Bot Image === */
-#chatbot-image {
-  width: 120px;
-  height: auto;
-  margin-right: 20px;
-}
-
-/* === Banner Content === */
-#chatbot-banner-content {
-  flex: 1;
-  text-align: center;
-  position: relative;
-}
-
-#chatbot-banner-content h2 {
-  margin: 0;
-  position: top;
+/* Banner Title (top-center) */
+#chatbot-banner h2 {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 1.8rem;
   font-weight: 600;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  margin: 0;
+  z-index: 5;
 }
 
+/* Left side: mascot */
+#chatbot-left {
+  display: flex;
+  align-items: center;
+}
+
+#chatbot-image {
+  width: 150px;
+  height: auto;
+}
+
+/* Chat toggle button (bottom-right) */
 #chatbot-toggle {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 20px;
+  right: 20px;
   background: #fff;
   color: #b62828;
   border: none;
-  padding: 10px 24px;
+  padding: 12px 28px;
   font-size: 1rem;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 5;
   transition: all 0.3s ease;
 }
 
@@ -66,17 +69,17 @@ body {
   transform: scale(1.05);
 }
 
-/* === Chat Window === */
+/* Chat window (right side) */
 #chatbot-container {
   position: absolute;
   right: 20px;
-  bottom: 20px;
-  width: 320px;
-  height: 460px;
+  top: 20px;
+  width: 360px;
+  height: calc(100% - 40px); /* banner height minus padding */
   background: #fff;
   color: #000;
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -105,7 +108,7 @@ body {
   line-height: 1;
 }
 
-/* Chat body (scroll area) */
+/* Chat body */
 #chatbot-body {
   flex: 1;
   padding: 12px;
@@ -116,7 +119,7 @@ body {
   gap: 10px;
 }
 
-/* Message bubbles */
+/* Messages */
 .message {
   max-width: 80%;
   padding: 10px 14px;
@@ -126,15 +129,8 @@ body {
   word-wrap: break-word;
 }
 
-.message.user {
-  background: #e0f3ff;
-  align-self: flex-end;
-}
-
-.message.bot {
-  background: #f1f1f1;
-  align-self: flex-start;
-}
+.message.user { background: #e0f3ff; align-self: flex-end; }
+.message.bot { background: #f1f1f1; align-self: flex-start; }
 
 /* Input area */
 #chatbot-input {
@@ -165,9 +161,7 @@ body {
   transition: background 0.2s ease;
 }
 
-#chatbot-input button:hover {
-  background: #9a2020;
-}
+#chatbot-input button:hover { background: #9a2020; }
 
 /* Human chat button */
 #humanChatBtnContainer {
@@ -187,9 +181,7 @@ body {
   font-size: 13px;
 }
 
-#humanChatBtn:hover {
-  background: #333;
-}
+#humanChatBtn:hover { background: #333; }
 
 /* Fade animation */
 @keyframes fadeIn {
@@ -198,20 +190,26 @@ body {
 }
 
 /* Responsive */
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   #chatbot-banner {
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    height: auto;
   }
 
-  #chatbot-image {
-    margin-bottom: 10px;
+  #chatbot-left {
+    margin-bottom: 20px;
   }
 
   #chatbot-container {
-    right: 10px;
-    left: 10px;
-    width: auto;
+    position: static;
+    width: 90%;
+    height: 500px;
+    margin-top: 20px;
+  }
+
+  #chatbot-toggle {
+    position: static;
+    margin-top: 20px;
   }
 }
