@@ -1,4 +1,4 @@
-// === Trattoria Chatbot Logic with Enhanced Normalization & Initial Greeting ===
+// === Trattoria Chatbot Logic with Combo-Priority Matching ===
 
 // --- Element references ---
 const sendBtn = document.getElementById("sendBtn");
@@ -15,18 +15,15 @@ function addMessage(sender, text) {
 }
 
 // --- Input normalization ---
-// Lowercase, remove punctuation, normalize repeated letters
 function normalize(input) {
   let msg = input.toLowerCase();
   msg = msg.replace(/[^a-z0-9\s]/g, ""); // remove punctuation
-  msg = msg.replace(/([a-z])\1{2,}/g, "$1"); // reduce repeated letters to 1
+  msg = msg.replace(/([a-z])\1{2,}/g, "$1"); // reduce repeated letters
   msg = msg.replace(/\s+/g, " "); // normalize spaces
-  msg = msg.trim();
-  return msg;
+  return msg.trim();
 }
 
 // --- Fuzzy match ---
-// Allows for minor misspellings
 function fuzzyMatch(msg, root) {
   const pattern = new RegExp(root.split("").join(".{0,2}"), "i");
   return pattern.test(msg);
@@ -38,48 +35,71 @@ function comboMatch(msg, keywords) {
   return keywords.every(word => fuzzyMatch(msg, word));
 }
 
-// --- Helper: ask() ---
-// Accepts keywords or combo arrays
+// --- Ask helper ---
+// Prioritize combo matches (arrays) over single keywords (strings)
 function ask(msg, patterns) {
-  return patterns.some(p => Array.isArray(p) ? comboMatch(msg, p) : fuzzyMatch(msg, p));
+  // First, check for combo arrays
+  for (let p of patterns) {
+    if (Array.isArray(p) && comboMatch(msg, p)) return true;
+  }
+  // Then check single keywords
+  return patterns.some(p => typeof p === "string" && fuzzyMatch(msg, p));
 }
 
 // --- Core chatbot logic ---
 function getResponse(input) {
   const msg = normalize(input);
 
-  if (ask(msg, [["reservation"], ["book", "table"], "reserve", "booking"]))
-    return { text: "Reservations aren't required, but you can make one on our homepage or by calling us. Recommended during busy hours!", triggerHuman: false };
-
-  if (ask(msg, [["dress"], ["attire"], "clothes"]))
-    return { text: "No dress code here — come as you are!", triggerHuman: false };
-
-  if (ask(msg, [["hours"], ["open", "time"], ["closing"], "when"]))
-    return { text: "We're open Tue–Thu 11am–9pm, and Fri/Sat 11am–10pm.", triggerHuman: false };
-
-  if (ask(msg, [["gluten"], ["celiac"], ["gf"]]))
-    return { text: "Gluten-free pasta, salads, and non-breaded chicken are available.", triggerHuman: false };
-
-  if (ask(msg, [["menu", "vegan"], ["menu", "veget"], "vegan", "veget", "veggie"]))
+  // Combo-priority list
+  if (ask(msg, [
+    ["menu","vegetarian"],
+    ["menu","vegan"],
+    ["vegetarian"],
+    ["veggie"],
+    ["vegan"]
+  ])) {
     return { text: "We offer a vegetarian pizza and several salad options!", triggerHuman: false };
+  }
 
-  if (ask(msg, [["allergy"], ["allergen"], ["nuts"], ["peanut"], ["dairy"]]))
+  if (ask(msg, [["reservation"], ["book","table"], "reserve","booking"])) {
+    return { text: "Reservations aren't required, but you can make one on our homepage or by calling us. Recommended during busy hours!", triggerHuman: false };
+  }
+
+  if (ask(msg, [["dress"], ["attire"], "clothes"])) {
+    return { text: "No dress code here — come as you are!", triggerHuman: false };
+  }
+
+  if (ask(msg, [["hours"], ["open","time"], ["closing"], "when"])) {
+    return { text: "We're open Tue–Thu 11am–9pm, and Fri/Sat 11am–10pm.", triggerHuman: false };
+  }
+
+  if (ask(msg, [["gluten"], ["celiac"], ["gf"]])) {
+    return { text: "Gluten-free pasta, salads, and non-breaded chicken are available.", triggerHuman: false };
+  }
+
+  if (ask(msg, [["allergy"], ["allergen"], ["nuts"], ["peanut"], ["dairy"]])) {
     return { text: "We do our best to accommodate allergies — just let your server know.", triggerHuman: false };
+  }
 
-  if (ask(msg, [["menu"], ["food"], ["dishes"], ["lunch"], ["dinner"]]))
+  if (ask(msg, [["menu"], ["food"], ["dishes"], ["lunch"], ["dinner"]])) {
     return { text: "Check out our lunch and dinner menus through the navigation links.", triggerHuman: false };
+  }
 
-  if (ask(msg, [["delivery"], ["deliver"], ["door"], ["to go"], ["takeout"], ["carryout"]]))
+  if (ask(msg, [["delivery"], ["deliver"], ["door"], ["to go"], ["takeout"], ["carryout"]])) {
     return { text: "We don't deliver, but we do offer to-go orders!", triggerHuman: false };
+  }
 
-  if (ask(msg, [["gift"], ["card"], ["certificate"], ["giftcard"]]))
+  if (ask(msg, [["gift"], ["card"], ["certificate"], ["giftcard"]])) {
     return { text: "Gift cards can be purchased by calling us directly.", triggerHuman: false };
+  }
 
-  if (ask(msg, [["cater"], ["catering"], ["event"], ["party"], ["order", "large"]]))
+  if (ask(msg, [["cater"], ["catering"], ["event"], ["party"], ["order","large"]])) {
     return { text: "Yes, we cater! Requests can be made online, by phone, or by email.", triggerHuman: false };
+  }
 
-  if (ask(msg, [["human"], ["person"], ["representative"], ["someone"], ["staff"]]))
+  if (ask(msg, [["human"], ["person"], ["representative"], ["someone"], ["staff"]])) {
     return { text: "Sure thing — connecting you with a human now!", triggerHuman: true };
+  }
 
   return { text: "I’m not sure about that, but I can connect you with a team member if you'd like.", triggerHuman: true };
 }
@@ -98,7 +118,7 @@ function handleSend() {
 
 // --- Event Listeners ---
 sendBtn.addEventListener("click", handleSend);
-userInput.addEventListener("keypress", (e) => {
+userInput.addEventListener("keypress", e => {
   if (e.key === "Enter") handleSend();
 });
 
