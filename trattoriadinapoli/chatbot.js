@@ -1,9 +1,11 @@
-// === Trattoria Chatbot Logic ===
+// === Trattoria Chatbot Logic with Enhanced Normalization & Initial Greeting ===
+
+// --- Element references ---
 const sendBtn = document.getElementById("sendBtn");
 const userInput = document.getElementById("userInput");
 const chatBody = document.getElementById("chatbot-body");
 
-// === Helper: Add message to chat window ===
+// --- Helper: Add message to chat window ---
 function addMessage(sender, text) {
   const msg = document.createElement("div");
   msg.classList.add("message", sender);
@@ -12,61 +14,77 @@ function addMessage(sender, text) {
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-// === Input normalization for robustness ===
+// --- Input normalization ---
+// Lowercase, remove punctuation, normalize repeated letters
 function normalize(input) {
-  return input
-    .toLowerCase()
-    .replace(/[.,!?]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
+  let msg = input.toLowerCase();
+  msg = msg.replace(/[^a-z0-9\s]/g, ""); // remove punctuation
+  msg = msg.replace(/([a-z])\1{2,}/g, "$1"); // reduce repeated letters to 1
+  msg = msg.replace(/\s+/g, " "); // normalize spaces
+  msg = msg.trim();
+  return msg;
 }
 
-// === Smart keyword matching ===
-function includesAny(msg, keywords) {
-  return keywords.some(k => msg.includes(k));
+// --- Fuzzy match ---
+// Allows for minor misspellings
+function fuzzyMatch(msg, root) {
+  const pattern = new RegExp(root.split("").join(".{0,2}"), "i");
+  return pattern.test(msg);
 }
 
-// === Core Response Logic ===
+// --- Combo match ---
+// All keywords in the array must appear
+function comboMatch(msg, keywords) {
+  return keywords.every(word => fuzzyMatch(msg, word));
+}
+
+// --- Helper: ask() ---
+// Accepts keywords or combo arrays
+function ask(msg, patterns) {
+  return patterns.some(p => Array.isArray(p) ? comboMatch(msg, p) : fuzzyMatch(msg, p));
+}
+
+// --- Core chatbot logic ---
 function getResponse(input) {
   const msg = normalize(input);
 
-  if (includesAny(msg, ["reservation", "book", "table"]))
+  if (ask(msg, [["reservation"], ["book", "table"], "reserve", "booking"]))
     return { text: "Reservations aren't required, but you can make one on our homepage or by calling us. Recommended during busy hours!", triggerHuman: false };
 
-  if (includesAny(msg, ["dress", "attire"]))
+  if (ask(msg, [["dress"], ["attire"], "clothes"]))
     return { text: "No dress code here — come as you are!", triggerHuman: false };
 
-  if (includesAny(msg, ["hours", "open", "closing"]))
+  if (ask(msg, [["hours"], ["open", "time"], ["closing"], "when"]))
     return { text: "We're open Tue–Thu 11am–9pm, and Fri/Sat 11am–10pm.", triggerHuman: false };
 
-  if (includesAny(msg, ["menu", "food", "dishes"]))
-    return { text: "Check out our lunch and dinner menus through the navigation links.", triggerHuman: false };
-
-  if (includesAny(msg, ["delivery", "deliver", "door"]))
-    return { text: "We don't deliver, but we do offer to-go orders!", triggerHuman: false };
-
-  if (includesAny(msg, ["gift", "card"]))
-    return { text: "Gift cards can be purchased by calling us directly.", triggerHuman: false };
-
-  if (includesAny(msg, ["gluten", "celiac"]))
+  if (ask(msg, [["gluten"], ["celiac"], ["gf"]]))
     return { text: "Gluten-free pasta, salads, and non-breaded chicken are available.", triggerHuman: false };
 
-  if (includesAny(msg, ["vegetarian", "veggie", "vegan"]))
+  if (ask(msg, [["menu", "vegan"], ["menu", "veget"], "vegan", "veget", "veggie"]))
     return { text: "We offer a vegetarian pizza and several salad options!", triggerHuman: false };
 
-  if (includesAny(msg, ["allergy", "allergen", "nuts"]))
+  if (ask(msg, [["allergy"], ["allergen"], ["nuts"], ["peanut"], ["dairy"]]))
     return { text: "We do our best to accommodate allergies — just let your server know.", triggerHuman: false };
 
-  if (includesAny(msg, ["cater", "catering", "event"]))
+  if (ask(msg, [["menu"], ["food"], ["dishes"], ["lunch"], ["dinner"]]))
+    return { text: "Check out our lunch and dinner menus through the navigation links.", triggerHuman: false };
+
+  if (ask(msg, [["delivery"], ["deliver"], ["door"], ["to go"], ["takeout"], ["carryout"]]))
+    return { text: "We don't deliver, but we do offer to-go orders!", triggerHuman: false };
+
+  if (ask(msg, [["gift"], ["card"], ["certificate"], ["giftcard"]]))
+    return { text: "Gift cards can be purchased by calling us directly.", triggerHuman: false };
+
+  if (ask(msg, [["cater"], ["catering"], ["event"], ["party"], ["order", "large"]]))
     return { text: "Yes, we cater! Requests can be made online, by phone, or by email.", triggerHuman: false };
 
-  if (includesAny(msg, ["human", "person", "representative"]))
+  if (ask(msg, [["human"], ["person"], ["representative"], ["someone"], ["staff"]]))
     return { text: "Sure thing — connecting you with a human now!", triggerHuman: true };
 
   return { text: "I’m not sure about that, but I can connect you with a team member if you'd like.", triggerHuman: true };
 }
 
-// === Send message handler ===
+// --- Send message handler ---
 function handleSend() {
   const input = userInput.value.trim();
   if (!input) return;
@@ -78,8 +96,13 @@ function handleSend() {
   setTimeout(() => addMessage("bot", response.text), 400);
 }
 
-// === Event Listeners ===
+// --- Event Listeners ---
 sendBtn.addEventListener("click", handleSend);
 userInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") handleSend();
+});
+
+// --- Initial Greeting ---
+window.addEventListener("DOMContentLoaded", () => {
+  addMessage("bot", "Hello! 👋 I'm TrattBot. Ask me anything about our menu, hours, or catering services!");
 });
