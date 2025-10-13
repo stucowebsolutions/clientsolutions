@@ -1,7 +1,6 @@
 /* === Base Reset === */
 body {
   margin: 0;
-  height: 400px;
   font-family: "Arial", sans-serif;
   background: transparent;
 }
@@ -15,7 +14,7 @@ body {
   width: 90%;
   max-width: 900px;
   height: 300px;
-  margin: 60px auto;
+  margin: 40px auto;
   padding: 20px;
   border-radius: 18px;
   background: linear-gradient(135deg, #b62828, #e74c3c);
