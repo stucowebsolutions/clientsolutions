@@ -1,6 +1,7 @@
 /* === Base Reset === */
 body {
   margin: 0;
+  height: 400px;
   font-family: "Arial", sans-serif;
   background: transparent;
 }
