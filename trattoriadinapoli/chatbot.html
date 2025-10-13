@@ -3,46 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chat with Tratt</title>
+  <title>Chat With Tratt</title>
+
+  <!-- GitHub-hosted CSS -->
   <link rel="stylesheet" href="https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/chatbot.css" />
 </head>
 <body>
-
+  <!-- === Chatbot Banner === -->
   <section id="chatbot-banner">
-
-    <!-- Banner Title (top-center) -->
-    <h2>Chat with Tratt</h2>
-
     <!-- Left: Mascot -->
     <div id="chatbot-left">
-      <img src="https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/assets/trattbot.png"
-           alt="TrattBot"
-           id="chatbot-image" />
+      <img
+        id="chatbot-image"
+        src="https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/assets/trattbot.png"
+        alt="Tratt Mascot"
+      />
     </div>
+
+    <!-- Title -->
+    <h2>Chat With Tratt</h2>
 
     <!-- Right: Chat Window -->
-    <div id="chatbot-container" style="display: none;">
-      <div id="chatbot-header">
-        <span>Trattoria Bot</span>
-        <button id="chatbot-close">×</button>
-      </div>
-
+    <div id="chatbot-container">
+      <div id="chatbot-header">Trattoria Bot</div>
       <div id="chatbot-body"></div>
-
       <div id="chatbot-input">
-        <input type="text" id="userInput" placeholder="Type a message..." />
+        <input type="text" id="userInput" placeholder="Type your message..." />
         <button id="sendBtn">Send</button>
       </div>
-
-      <div id="humanChatBtnContainer">
-        <button id="humanChatBtn">Speak with a human</button>
-      </div>
     </div>
-
-    <!-- Chat toggle button (bottom-right inside banner) -->
-    <button id="chatbot-toggle">Chat</button>
   </section>
 
+  <!-- GitHub-hosted JS -->
   <script src="https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/chatbot.js"></script>
 </body>
 </html>
