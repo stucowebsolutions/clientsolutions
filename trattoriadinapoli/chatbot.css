@@ -43,6 +43,9 @@ body {
 }
 
 #chatbot-image {
+  position: absolute;
+  bottom: 20px;
+  left: 30%;
   width: 300px;
   height: auto;
   border-radius: 10px;
@@ -53,8 +56,8 @@ body {
   position: absolute;
   right: 20px;
   bottom: 20px;
-  width: 400px;
-  height: calc(100% - 60px);
+  width: 500px;
+  height: calc(100% - 80px);
   background: #fff;
   color: #000;
   border-radius: 12px;
@@ -126,7 +129,7 @@ body {
 }
 
 #chatbot-input button {
-  background: #b62828;
+  background: #7D869C;
   color: #fff;
   border: none;
   border-radius: 16px;
