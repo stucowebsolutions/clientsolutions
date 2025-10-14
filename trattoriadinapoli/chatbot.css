@@ -150,25 +150,53 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* === Responsive Rules === */
+/* === Responsive Rules (Mobile Improvements) === */
 @media (max-width: 800px) {
   #chatbot-banner {
     flex-direction: column;
     align-items: center;
     height: auto;
+    padding: 15px;
   }
 
   #chatbot-container {
-    width: 90%;
-    height: 500px;
+    width: 95%;
+    height: 450px; /* slightly smaller for mobile */
+    right: auto;
+    bottom: 20px;
     margin-top: 20px;
   }
 
+  #chatbot-body {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  #chatbot-input {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #chatbot-input input {
+    width: 100%;
+    padding: 10px;
+  }
+
+  #chatbot-input button {
+    width: 100%;
+    margin-left: 0;
+    padding: 10px;
+  }
+
   #chatbot-image {
-    width: 120px;
+    width: 100px;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   #chatbot-banner h2 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    top: 10px;
   }
 }
