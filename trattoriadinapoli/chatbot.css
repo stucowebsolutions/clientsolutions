@@ -53,8 +53,8 @@ body {
   position: absolute;
   right: 20px;
   bottom: 20px;
-  width: 360px;
-  height: calc(100% - 40px);
+  width: 400px;
+  height: calc(100% - 60px);
   background: #fff;
   color: #000;
   border-radius: 12px;
