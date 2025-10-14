@@ -51,9 +51,10 @@ body {
 /* === Chat Window (Right Side) === */
 #chatbot-container {
   position: relative;
+  bottom: 20px;
   width: 360px;
-  height: calc(100% - 80px);
-  background: #fff;
+  height: calc(100% - 40px);
+  background: #6A706E;
   color: #000;
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
