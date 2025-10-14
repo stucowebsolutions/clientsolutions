@@ -51,13 +51,7 @@ function getResponse(input) {
   const msg = normalize(input);
 
   // Combo-priority list
-  if (ask(msg, [
-    ["menu","vegetarian"],
-    ["menu","vegan"],
-    ["vegetarian"],
-    ["veggie"],
-    ["vegan"]
-  ])) {
+  if (ask(msg, [ ["menu","vegetarian"], ["menu","vegan"], ["vegetarian"], ["veggie"], ["vegan"] ])) {
     return { text: "We offer a vegetarian pizza and several salad options!", triggerHuman: false };
   }
 
@@ -98,10 +92,11 @@ function getResponse(input) {
   }
 
   if (ask(msg, [["human"], ["person"], ["representative"], ["someone"], ["staff"]])) {
-    return { text: "Sure thing — connecting you with a human now!", triggerHuman: true };
+    return { text: "I’m not sure about that one — but you can reach our team instantly using the live chat widget in the bottom right corner of your screen!", triggerHuman: false };
   }
 
-  return { text: "I’m not sure about that, but I can connect you with a team member if you'd like.", triggerHuman: true };
+  return {   return { text: "I’m not sure about that one — but you can reach a team member instantly using the live chat widget in the bottom right corner of your screen!", 
+    triggerHuman: false };
 }
 
 // --- Send message handler ---
