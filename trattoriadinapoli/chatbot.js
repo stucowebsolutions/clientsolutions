@@ -92,7 +92,7 @@ function getResponse(input) {
   }
 
   if (ask(msg, [["human"], ["person"], ["representative"], ["someone"], ["staff"]])) {
-    return { text: "I’m not sure about that one — but you can reach our team instantly using the live chat widget in the bottom right corner of your screen!", triggerHuman: false };
+    return { text: "You can reach our team instantly using the live chat widget in the bottom right corner of your screen!", triggerHuman: false };
   }
 
   return {   return { text: "I’m not sure about that one — but you can reach a team member instantly using the live chat widget in the bottom right corner of your screen!", 
