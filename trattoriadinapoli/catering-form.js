@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-  // ----- MENU DATA -----
+  // ----- MENU DATA (unchanged) -----
   const menuData = {
     "Antipasta":[
       {name:"House Salad",priceHalf:50,priceFull:100,servesHalf:10,servesFull:20},
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const qty = document.createElement("input"); qty.type="number"; qty.min="1"; qty.value="1"; qty.className="menu-qty";
         optionsRow.appendChild(sizeDiv); optionsRow.appendChild(priceDiv); optionsRow.appendChild(qty);
       } else if (item.priceHalf && item.priceFull) {
-        // multi-size -> price shown in select options only
+        // multi-size -> price shown in select options only (no static priceDiv)
         const sizeDiv = document.createElement("div"); sizeDiv.className = "size-text"; sizeDiv.textContent = `Half (${item.servesHalf}) / Full (${item.servesFull})`;
         const select = document.createElement("select"); select.className = "menu-size";
         const optHalf = document.createElement("option"); optHalf.value="half"; optHalf.textContent=`Half - $${item.priceHalf}`;
@@ -162,8 +162,7 @@ document.addEventListener("DOMContentLoaded", function() {
     pickupBtn.style.background="#000"; pickupBtn.style.color="#fff"; pickupBtn.setAttribute("aria-pressed","true");
     deliveryBtn.style.background="#fff"; deliveryBtn.style.color="#000"; deliveryBtn.setAttribute("aria-pressed","false");
     pickupInput.value="pickup"; deliveryWrapper.style.display="none";
-    clearError('deliveryAddress');
-    const el = document.getElementById('deliveryAddress'); if(el) el.classList.remove('invalid');
+    clearError('deliveryAddress'); // in case
   });
   deliveryBtn.addEventListener("click", ()=>{
     deliveryBtn.style.background="#000"; deliveryBtn.style.color="#fff"; deliveryBtn.setAttribute("aria-pressed","true");
@@ -194,76 +193,98 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // ----- Validation helpers -----
   function showError(id, message){
-    const err = document.getElementById('err-' + id);
-    if(err){
-      err.textContent = message;
-      err.style.display = 'block';
+    const el = document.getElementById('err-' + id);
+    if(el){
+      el.textContent = message;
+      el.style.display = 'block';
     }
-    const field = document.getElementById(id);
-    if(field) field.classList.add('invalid');
   }
   function clearError(id){
-    const err = document.getElementById('err-' + id);
-    if(err){
-      err.textContent = '';
-      err.style.display = 'none';
+    const el = document.getElementById('err-' + id);
+    if(el){
+      el.textContent = '';
+      el.style.display = 'none';
     }
-    const field = document.getElementById(id);
-    if(field) field.classList.remove('invalid');
   }
 
-  // field validators
+  // field-specific validators (returns true if valid)
   function validateName(){
     const v = document.getElementById('name').value.trim();
-    if(!v || v.length < 2){ showError('name', 'Please enter your name (at least 2 letters).'); document.getElementById('name').focus(); return false; }
+    if(!v || v.length < 2){
+      showError('name', 'Please enter your name (at least 2 characters).');
+      return false;
+    }
     clearError('name'); return true;
   }
   function validateEmail(){
     const el = document.getElementById('email');
     const v = el.value.trim();
-    if(!v){ showError('email','Please enter your email.'); el.focus(); return false; }
-    if(!el.checkValidity()){ showError('email','Please enter a valid email address.'); el.focus(); return false; }
+    if(!v){
+      showError('email','Please enter your email.');
+      return false;
+    }
+    // rely on browser email validity as well
+    if(!el.checkValidity()){
+      showError('email','Please enter a valid email address.');
+      return false;
+    }
     clearError('email'); return true;
   }
   function validatePhone(){
-    const el = document.getElementById('phone');
-    const v = el.value.trim();
+    const v = document.getElementById('phone').value.trim();
+    // basic check: digits + optional + - spaces; length requirement
     const digits = v.replace(/[^\d]/g,'');
-    if(!v || digits.length < 7){ showError('phone','Please enter a valid phone number (at least 7 digits).'); el.focus(); return false; }
+    if(!v || digits.length < 7){
+      showError('phone','Please enter a valid phone number (at least 7 digits).');
+      return false;
+    }
     clearError('phone'); return true;
   }
   function validatePeople(){
-    const el = document.getElementById('people');
-    const v = el.value;
-    if(!v || Number(v) < 1){ showError('people','Please enter number of people (1 or more).'); el.focus(); return false; }
+    const v = document.getElementById('people').value;
+    if(!v || Number(v) < 1){
+      showError('people','Please enter number of people (1 or more).');
+      return false;
+    }
     clearError('people'); return true;
   }
   function validateEventDate(){
-    const el = document.getElementById('eventDate');
-    const v = el.value;
-    if(!v){ showError('eventDate','Please pick an event date.'); el.focus(); return false; }
-    const selected = new Date(v); const minDate = new Date(el.min);
-    if(selected < minDate){ showError('eventDate','Event date must be at least two weeks from today.'); el.focus(); return false; }
+    const v = document.getElementById('eventDate').value;
+    if(!v){
+      showError('eventDate','Please pick an event date.');
+      return false;
+    }
+    // check min date enforced earlier
+    const selected = new Date(v); const minDate = new Date(eventDate.min);
+    if(selected < minDate){
+      showError('eventDate','Event date must be at least two weeks from today.');
+      return false;
+    }
     clearError('eventDate'); return true;
   }
   function validateTimeframe(){
     const s = document.getElementById('startTime').value;
     const e = document.getElementById('endTime').value;
-    if(!s || !e){ showError('timeframe','Please select a start and end time.'); return false; }
+    if(!s || !e){
+      showError('timeframe','Please select a start and end time.');
+      return false;
+    }
     clearError('timeframe'); return true;
   }
   function validateDeliveryAddressIfNeeded(){
     if(pickupInput.value === 'delivery'){
-      const el = document.getElementById('deliveryAddress');
-      const v = el.value.trim();
-      if(!v){ showError('deliveryAddress','Please enter a delivery address.'); el.focus(); return false; }
+      const v = document.getElementById('deliveryAddress').value.trim();
+      if(!v){
+        showError('deliveryAddress','Please enter a delivery address.');
+        return false;
+      }
       clearError('deliveryAddress'); return true;
     } else {
       clearError('deliveryAddress'); return true;
     }
   }
 
-  // attach blur/change listeners to validate inline
+  // attach blur listeners to validate inline
   document.getElementById('name').addEventListener('blur', validateName);
   document.getElementById('email').addEventListener('blur', validateEmail);
   document.getElementById('phone').addEventListener('blur', validatePhone);
@@ -276,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // ----- Form submit: build summary + validation + snap to top of form -----
   const form = document.getElementById("catering-form");
   form.addEventListener("submit", function(e){
-    // Run validators in order; each validator will focus its field when invalid
+    // validate required fields (name/email/phone are submitted separately)
     const validators = [
       validateName,
       validateEmail,
@@ -288,12 +309,19 @@ document.addEventListener("DOMContentLoaded", function() {
     ];
     for(const fn of validators){
       if(!fn()){
+        // prevent submission and focus first invalid field
         e.preventDefault();
+        // find first visible error and focus its field
+        const firstErr = document.querySelector('.error-msg[style*="display: block"], .error-msg[style*="display:block"]') || document.querySelector('.error-msg[style*="display: block;"]');
+        if(firstErr){
+          const id = firstErr.id?.replace('err-','');
+          if(id && document.getElementById(id)) document.getElementById(id).focus();
+        }
         return;
       }
     }
 
-    // Build ordered items
+    // Build ordered items list
     const items = menuContainer.querySelectorAll(".menu-item");
     let idx=0;
     let ordered=[];
@@ -305,6 +333,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const qty = card.querySelector(".menu-qty")?.value || "0";
         const sizeSel = card.querySelector(".menu-size");
         const size = sizeSel ? sizeSel.value : (item.perPerson ? "per person" : "full");
+        // For readability, include price used
         let priceUsed = "";
         if(item.perPerson || (!item.priceHalf && item.priceFull)){
           priceUsed = `$${item.priceFull}`;
@@ -318,7 +347,7 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     }
 
-    // Totals
+    // Totals are already calculated in DOM
     const subtotal = parseFloat(document.getElementById("subtotal").textContent || "0");
     const service = parseFloat(document.getElementById("serviceCharge").textContent || "0");
     const total = parseFloat(document.getElementById("totalPrice").textContent || "0");
@@ -349,9 +378,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById("summaryField").value = summaryLines.join("\n");
 
-    // scroll the form into view (top of form) so user sees captcha/confirmation area
+    // scroll the form into view so user can see captcha/confirmation that Formspree shows
+    // do this before allowing default submit to proceed
     form.scrollIntoView({behavior:"smooth"});
 
-    // allow default submit to proceed to Formspree
+    // allow the form to submit normally (to Formspree)
+    // no e.preventDefault()
   });
+
 });
