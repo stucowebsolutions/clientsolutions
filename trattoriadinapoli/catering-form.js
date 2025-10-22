@@ -222,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const total = parseFloat(document.getElementById("totalPrice").textContent || "0");
     const deposit = parseFloat(document.getElementById("deposit").textContent || "0");
     const est = document.getElementById("estimatedPeople").textContent || "0";
-    const confDays = [...document.querySelectorAll("input.confirmationDay:checked")].map(x=>x.value).join(", ");
+    const confDays = [...document.querySelectorAll("input.confirmationDays:checked")].map(x=>x.value).join(", ");
 
     const summaryLines = [
       `Number of People: ${document.getElementById('people').value || ''}`,
