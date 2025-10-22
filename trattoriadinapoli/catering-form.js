@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-  // ----- MENU DATA (unchanged) -----
   const menuData = {
     "Antipasta":[
       {name:"House Salad",priceHalf:50,priceFull:100,servesHalf:10,servesFull:20},
@@ -32,21 +31,16 @@ document.addEventListener("DOMContentLoaded", function() {
     ]
   };
 
-  // ----- Build Menu UI -----
   const menuContainer = document.getElementById("menuContainer");
   for (const category in menuData) {
     const section = document.createElement("div");
     section.className = "menu-section";
     section.innerHTML = `<h4>${category}</h4>`;
-
     const grid = document.createElement("div");
     grid.className = "menu-grid";
-
     menuData[category].forEach(item => {
       const card = document.createElement("div");
       card.className = "menu-item";
-
-      // Top line: checkbox + name
       const top = document.createElement("div");
       top.className = "top-line";
       const cb = document.createElement("input");
@@ -59,18 +53,15 @@ document.addEventListener("DOMContentLoaded", function() {
       top.appendChild(nameSpan);
       card.appendChild(top);
 
-      // Second line: size/serves, price (static only for per-person/single), selector (only for multi-size), qty
       const optionsRow = document.createElement("div");
       optionsRow.className = "menu-options";
 
-      if (item.perPerson || (!item.priceHalf && item.priceFull && category === "Desserts")) {
-        // single-price / per-person
-        const sizeDiv = document.createElement("div"); sizeDiv.className = "size-text"; sizeDiv.textContent = item.perPerson ? "Per Person" : "Full";
+      if(item.perPerson || (!item.priceHalf && item.priceFull && category === "Desserts")){
+        const sizeDiv = document.createElement("div"); sizeDiv.className = "size-text"; sizeDiv.textContent = item.perPerson ? "Per Person" : (item.servesFull ? item.servesFull : "Full");
         const priceDiv = document.createElement("div"); priceDiv.className = "menu-price"; priceDiv.textContent = `$${item.priceFull}`;
         const qty = document.createElement("input"); qty.type="number"; qty.min="1"; qty.value="1"; qty.className="menu-qty";
         optionsRow.appendChild(sizeDiv); optionsRow.appendChild(priceDiv); optionsRow.appendChild(qty);
       } else if (item.priceHalf && item.priceFull) {
-        // multi-size -> price shown in select options only (no static priceDiv)
         const sizeDiv = document.createElement("div"); sizeDiv.className = "size-text"; sizeDiv.textContent = `Half (${item.servesHalf}) / Full (${item.servesFull})`;
         const select = document.createElement("select"); select.className = "menu-size";
         const optHalf = document.createElement("option"); optHalf.value="half"; optHalf.textContent=`Half - $${item.priceHalf}`;
@@ -79,8 +70,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const qty = document.createElement("input"); qty.type="number"; qty.min="1"; qty.value="1"; qty.className="menu-qty";
         optionsRow.appendChild(sizeDiv); optionsRow.appendChild(select); optionsRow.appendChild(qty);
       } else {
-        // fallback single full-size
-        const sizeDiv = document.createElement("div"); sizeDiv.className = "size-text"; sizeDiv.textContent = "Full";
+        const sizeDiv = document.createElement("div"); sizeDiv.className = "size-text"; sizeDiv.textContent = item.servesFull ? item.servesFull : "Full";
         const priceDiv = document.createElement("div"); priceDiv.className = "menu-price"; priceDiv.textContent = `$${item.priceFull}`;
         const qty = document.createElement("input"); qty.type="number"; qty.min="1"; qty.value="1"; qty.className="menu-qty";
         optionsRow.appendChild(sizeDiv); optionsRow.appendChild(priceDiv); optionsRow.appendChild(qty);
@@ -89,12 +79,10 @@ document.addEventListener("DOMContentLoaded", function() {
       card.appendChild(optionsRow);
       grid.appendChild(card);
     });
-
     section.appendChild(grid);
     menuContainer.appendChild(section);
   }
 
-  // ----- Totals calculation -----
   const subtotalEl = document.getElementById("subtotal"),
         serviceEl = document.getElementById("serviceCharge"),
         totalEl = document.getElementById("totalPrice"),
@@ -142,7 +130,6 @@ document.addEventListener("DOMContentLoaded", function() {
   menuContainer.addEventListener("input", calculateTotals);
   menuContainer.addEventListener("change", calculateTotals);
 
-  // ----- Time dropdowns -----
   const startTime = document.getElementById("startTime"), endTime = document.getElementById("endTime");
   function format12(h,m){ const ampm = h>=12?"PM":"AM"; let hh=h%12; if(hh===0) hh=12; const mm = m<10?"0"+m:m; return `${hh}:${mm} ${ampm}`; }
   for(let h=8; h<=20; h++){
@@ -154,7 +141,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
-  // ----- Pickup/Delivery toggle -----
   const pickupBtn = document.getElementById("togglePickup"), deliveryBtn = document.getElementById("toggleDelivery"),
         pickupInput = document.getElementById("pickupDeliveryInput"), deliveryWrapper = document.getElementById("deliveryWrapper");
 
@@ -162,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function() {
     pickupBtn.style.background="#000"; pickupBtn.style.color="#fff"; pickupBtn.setAttribute("aria-pressed","true");
     deliveryBtn.style.background="#fff"; deliveryBtn.style.color="#000"; deliveryBtn.setAttribute("aria-pressed","false");
     pickupInput.value="pickup"; deliveryWrapper.style.display="none";
-    clearError('deliveryAddress'); // in case
+    clearError('deliveryAddress');
   });
   deliveryBtn.addEventListener("click", ()=>{
     deliveryBtn.style.background="#000"; deliveryBtn.style.color="#fff"; deliveryBtn.setAttribute("aria-pressed","true");
@@ -170,7 +156,6 @@ document.addEventListener("DOMContentLoaded", function() {
     pickupInput.value="delivery"; deliveryWrapper.style.display="block";
   });
 
-  // ----- Date control (two-week minimum) -----
   const eventDate = document.getElementById("eventDate");
   function setMinDate(){
     const today = new Date();
@@ -191,100 +176,17 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-  // ----- Validation helpers -----
-  function showError(id, message){
-    const el = document.getElementById('err-' + id);
-    if(el){
-      el.textContent = message;
-      el.style.display = 'block';
-    }
-  }
-  function clearError(id){
-    const el = document.getElementById('err-' + id);
-    if(el){
-      el.textContent = '';
-      el.style.display = 'none';
-    }
-  }
+  function showError(id, message){ const el = document.getElementById('err-' + id); if(el){ el.textContent = message; el.style.display = 'block'; } }
+  function clearError(id){ const el = document.getElementById('err-' + id); if(el){ el.textContent = ''; el.style.display = 'none'; } }
 
-  // field-specific validators (returns true if valid)
-  function validateName(){
-    const v = document.getElementById('name').value.trim();
-    if(!v || v.length < 2){
-      showError('name', 'Please enter your name (at least 2 characters).');
-      return false;
-    }
-    clearError('name'); return true;
-  }
-  function validateEmail(){
-    const el = document.getElementById('email');
-    const v = el.value.trim();
-    if(!v){
-      showError('email','Please enter your email.');
-      return false;
-    }
-    // rely on browser email validity as well
-    if(!el.checkValidity()){
-      showError('email','Please enter a valid email address.');
-      return false;
-    }
-    clearError('email'); return true;
-  }
-  function validatePhone(){
-    const v = document.getElementById('phone').value.trim();
-    // basic check: digits + optional + - spaces; length requirement
-    const digits = v.replace(/[^\d]/g,'');
-    if(!v || digits.length < 7){
-      showError('phone','Please enter a valid phone number (at least 7 digits).');
-      return false;
-    }
-    clearError('phone'); return true;
-  }
-  function validatePeople(){
-    const v = document.getElementById('people').value;
-    if(!v || Number(v) < 1){
-      showError('people','Please enter number of people (1 or more).');
-      return false;
-    }
-    clearError('people'); return true;
-  }
-  function validateEventDate(){
-    const v = document.getElementById('eventDate').value;
-    if(!v){
-      showError('eventDate','Please pick an event date.');
-      return false;
-    }
-    // check min date enforced earlier
-    const selected = new Date(v); const minDate = new Date(eventDate.min);
-    if(selected < minDate){
-      showError('eventDate','Event date must be at least two weeks from today.');
-      return false;
-    }
-    clearError('eventDate'); return true;
-  }
-  function validateTimeframe(){
-    const s = document.getElementById('startTime').value;
-    const e = document.getElementById('endTime').value;
-    if(!s || !e){
-      showError('timeframe','Please select a start and end time.');
-      return false;
-    }
-    clearError('timeframe'); return true;
-  }
-  function validateDeliveryAddressIfNeeded(){
-    if(pickupInput.value === 'delivery'){
-      const v = document.getElementById('deliveryAddress').value.trim();
-      if(!v){
-        showError('deliveryAddress','Please enter a delivery address.');
-        return false;
-      }
-      clearError('deliveryAddress'); return true;
-    } else {
-      clearError('deliveryAddress'); return true;
-    }
-  }
+  function validateName(){ const v = document.getElementById('name').value.trim(); if(!v || v.length < 2){ showError('name', 'Please enter your name (at least 2 characters).'); return false; } clearError('name'); return true; }
+  function validateEmail(){ const el = document.getElementById('email'); const v = el.value.trim(); if(!v){ showError('email','Please enter your email.'); return false; } if(!el.checkValidity()){ showError('email','Please enter a valid email address.'); return false; } clearError('email'); return true; }
+  function validatePhone(){ const v = document.getElementById('phone').value.trim(); const digits = v.replace(/[^\d]/g,''); if(!v || digits.length < 7){ showError('phone','Please enter a valid phone number (at least 7 digits).'); return false; } clearError('phone'); return true; }
+  function validatePeople(){ const v = document.getElementById('people').value; if(!v || Number(v) < 1){ showError('people','Please enter number of people (1 or more).'); return false; } clearError('people'); return true; }
+  function validateEventDate(){ const v = document.getElementById('eventDate').value; if(!v){ showError('eventDate','Please pick an event date.'); return false; } const selected = new Date(v); const minDate = new Date(eventDate.min); if(selected < minDate){ showError('eventDate','Event date must be at least two weeks from today.'); return false; } clearError('eventDate'); return true; }
+  function validateTimeframe(){ const s = document.getElementById('startTime').value; const e = document.getElementById('endTime').value; if(!s || !e){ showError('timeframe','Please select a start and end time.'); return false; } clearError('timeframe'); return true; }
+  function validateDeliveryAddressIfNeeded(){ if(pickupInput.value === 'delivery'){ const v = document.getElementById('deliveryAddress').value.trim(); if(!v){ showError('deliveryAddress','Please enter a delivery address.'); return false; } clearError('deliveryAddress'); return true; } else { clearError('deliveryAddress'); return true; } }
 
-  // attach blur listeners to validate inline
   document.getElementById('name').addEventListener('blur', validateName);
   document.getElementById('email').addEventListener('blur', validateEmail);
   document.getElementById('phone').addEventListener('blur', validatePhone);
@@ -294,77 +196,40 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById('endTime').addEventListener('change', validateTimeframe);
   document.getElementById('deliveryAddress').addEventListener('blur', validateDeliveryAddressIfNeeded);
 
-  // ----- Form submit: build summary + validation + snap to top of form -----
   const form = document.getElementById("catering-form");
   form.addEventListener("submit", function(e){
-    // validate required fields (name/email/phone are submitted separately)
-    const validators = [
-      validateName,
-      validateEmail,
-      validatePhone,
-      validatePeople,
-      validateEventDate,
-      validateTimeframe,
-      validateDeliveryAddressIfNeeded
-    ];
-    for(const fn of validators){
-      if(!fn()){
-        // prevent submission and focus first invalid field
-        e.preventDefault();
-        // find first visible error and focus its field
-        const firstErr = document.querySelector('.error-msg[style*="display: block"], .error-msg[style*="display:block"]') || document.querySelector('.error-msg[style*="display: block;"]');
-        if(firstErr){
-          const id = firstErr.id?.replace('err-','');
-          if(id && document.getElementById(id)) document.getElementById(id).focus();
-        }
-        return;
-      }
-    }
+    const validators = [validateName,validateEmail,validatePhone,validatePeople,validateEventDate,validateTimeframe,validateDeliveryAddressIfNeeded];
+    for(const fn of validators){ if(!fn()){ e.preventDefault(); const firstErr = document.querySelector('.error-msg[style*="display: block"], .error-msg[style*="display:block"], .error-message[style*="display:block"]'); if(firstErr){ const id = firstErr.id?.replace('err-',''); if(id && document.getElementById(id)) document.getElementById(id).focus(); } return; } }
 
-    // Build ordered items list
     const items = menuContainer.querySelectorAll(".menu-item");
-    let idx=0;
-    let ordered=[];
+    let idx=0; let ordered=[];
     for(const category in menuData){
       menuData[category].forEach(item=>{
-        const card = items[idx++];
-        const checked = card.querySelector(".menu-checkbox");
-        if(!checked || !checked.checked) return;
+        const card = items[idx++]; const checked = card.querySelector(".menu-checkbox"); if(!checked || !checked.checked) return;
         const qty = card.querySelector(".menu-qty")?.value || "0";
-        const sizeSel = card.querySelector(".menu-size");
-        const size = sizeSel ? sizeSel.value : (item.perPerson ? "per person" : "full");
-        // For readability, include price used
+        const sizeSel = card.querySelector(".menu-size"); const size = sizeSel ? sizeSel.value : (item.perPerson ? "per person" : (item.servesFull || "full"));
         let priceUsed = "";
-        if(item.perPerson || (!item.priceHalf && item.priceFull)){
-          priceUsed = `$${item.priceFull}`;
-        } else if(item.priceHalf && item.priceFull){
-          const p = (size === "half") ? item.priceHalf : item.priceFull;
-          priceUsed = `$${p}`;
-        } else {
-          priceUsed = `$${item.priceFull}`;
-        }
-        ordered.push(`${item.name} — ${size} x${qty} @ ${priceUsed}`);
+        if(item.perPerson || (!item.priceHalf && item.priceFull)){ priceUsed = `$${item.priceFull}`; }
+        else if(item.priceHalf && item.priceFull){ const p = (size === "half") ? item.priceHalf : item.priceFull; priceUsed = `$${p}`; }
+        else { priceUsed = `$${item.priceFull}`; }
+        if(item.name==="Cheesecake" || item.name==="Olive Oil Cake"){ ordered.push(`${item.name} — ${item.servesFull} x${qty} @ ${priceUsed}`); }
+        else { ordered.push(`${item.name} — ${size} x${qty} @ ${priceUsed}`); }
       });
     }
 
-    // Totals are already calculated in DOM
     const subtotal = parseFloat(document.getElementById("subtotal").textContent || "0");
     const service = parseFloat(document.getElementById("serviceCharge").textContent || "0");
     const total = parseFloat(document.getElementById("totalPrice").textContent || "0");
     const deposit = parseFloat(document.getElementById("deposit").textContent || "0");
     const est = document.getElementById("estimatedPeople").textContent || "0";
-
-    // Confirmation days
     const confDays = [...document.querySelectorAll("input.confirmationDay:checked")].map(x=>x.value).join(", ");
 
-    // Build the single summary string
     const summaryLines = [
       `Number of People: ${document.getElementById('people').value || ''}`,
       `Event Date: ${document.getElementById('eventDate').value || ''}`,
       `Confirmation Days: ${confDays}`,
       `Timeframe: ${startTime.value || ''} - ${endTime.value || ''}`,
       `Pickup/Delivery: ${pickupInput.value}`,
-      ...(pickupInput.value === "delivery" ? [`Delivery Address: ${document.getElementById('deliveryAddress').value || ''}`] : []),
       "",
       "Ordered Items:",
       ...ordered,
@@ -378,12 +243,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
     document.getElementById("summaryField").value = summaryLines.join("\n");
 
-    // scroll the form into view so user can see captcha/confirmation that Formspree shows
-    // do this before allowing default submit to proceed
-    form.scrollIntoView({behavior:"smooth"});
+    form.querySelectorAll("input, select, textarea").forEach(f=>{
+      if(!["name","email","phone","summary"].includes(f.name)) f.removeAttribute("name");
+    });
 
-    // allow the form to submit normally (to Formspree)
-    // no e.preventDefault()
+    form.scrollIntoView({behavior:"smooth"});
   });
 
 });
