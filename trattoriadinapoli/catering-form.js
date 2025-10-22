@@ -57,10 +57,25 @@ document.addEventListener("DOMContentLoaded", function() {
       optionsRow.className = "menu-options";
 
       if(item.perPerson || (!item.priceHalf && item.priceFull && category === "Desserts")){
-        const sizeDiv = document.createElement("div"); sizeDiv.className = "size-text"; sizeDiv.textContent = item.perPerson ? "Per Person" : (item.servesFull ? item.servesFull : "Full");
-        const priceDiv = document.createElement("div"); priceDiv.className = "menu-price"; priceDiv.textContent = `$${item.priceFull}`;
-        const qty = document.createElement("input"); qty.type="number"; qty.min="1"; qty.value="1"; qty.className="menu-qty";
-        optionsRow.appendChild(sizeDiv); optionsRow.appendChild(priceDiv); optionsRow.appendChild(qty);
+        const sizeDiv = document.createElement("div");
+        sizeDiv.className = "size-text";
+        // Format Cheesecake and Olive Oil Cake as Full (8)
+        if(item.name === "Cheesecake" || item.name === "Olive Oil Cake"){
+          sizeDiv.textContent = `Full (${item.servesFull})`;
+        } else {
+          sizeDiv.textContent = item.perPerson ? "Per Person" : (item.servesFull ? item.servesFull : "Full");
+        }
+        const priceDiv = document.createElement("div");
+        priceDiv.className = "menu-price";
+        priceDiv.textContent = `$${item.priceFull}`;
+        const qty = document.createElement("input");
+        qty.type="number";
+        qty.min="1";
+        qty.value="1";
+        qty.className="menu-qty";
+        optionsRow.appendChild(sizeDiv);
+        optionsRow.appendChild(priceDiv);
+        optionsRow.appendChild(qty);
       } else if (item.priceHalf && item.priceFull) {
         const sizeDiv = document.createElement("div"); sizeDiv.className = "size-text"; sizeDiv.textContent = `Half (${item.servesHalf}) / Full (${item.servesFull})`;
         const select = document.createElement("select"); select.className = "menu-size";
@@ -70,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const qty = document.createElement("input"); qty.type="number"; qty.min="1"; qty.value="1"; qty.className="menu-qty";
         optionsRow.appendChild(sizeDiv); optionsRow.appendChild(select); optionsRow.appendChild(qty);
       } else {
-        const sizeDiv = document.createElement("div"); sizeDiv.className = "size-text"; sizeDiv.textContent = item.servesFull ? item.servesFull : "Full";
+        const sizeDiv = document.createElement("div"); sizeDiv.className = "size-text"; sizeDiv.textContent = item.servesFull ? `Full (${item.servesFull})` : "Full";
         const priceDiv = document.createElement("div"); priceDiv.className = "menu-price"; priceDiv.textContent = `$${item.priceFull}`;
         const qty = document.createElement("input"); qty.type="number"; qty.min="1"; qty.value="1"; qty.className="menu-qty";
         optionsRow.appendChild(sizeDiv); optionsRow.appendChild(priceDiv); optionsRow.appendChild(qty);
@@ -207,13 +222,17 @@ document.addEventListener("DOMContentLoaded", function() {
       menuData[category].forEach(item=>{
         const card = items[idx++]; const checked = card.querySelector(".menu-checkbox"); if(!checked || !checked.checked) return;
         const qty = card.querySelector(".menu-qty")?.value || "0";
-        const sizeSel = card.querySelector(".menu-size"); const size = sizeSel ? sizeSel.value : (item.perPerson ? "per person" : (item.servesFull || "full"));
+        const sizeSel = card.querySelector(".menu-size"); const size = sizeSel ? sizeSel.value : (item.perPerson ? "Per Person" : (item.servesFull ? `Full (${item.servesFull})` : "Full"));
         let priceUsed = "";
         if(item.perPerson || (!item.priceHalf && item.priceFull)){ priceUsed = `$${item.priceFull}`; }
         else if(item.priceHalf && item.priceFull){ const p = (size === "half") ? item.priceHalf : item.priceFull; priceUsed = `$${p}`; }
         else { priceUsed = `$${item.priceFull}`; }
-        if(item.name==="Cheesecake" || item.name==="Olive Oil Cake"){ ordered.push(`${item.name} — ${item.servesFull} x${qty} @ ${priceUsed}`); }
-        else { ordered.push(`${item.name} — ${size} x${qty} @ ${priceUsed}`); }
+        // Format Cheesecake & Olive Oil Cake summary
+        if(item.name==="Cheesecake" || item.name==="Olive Oil Cake"){
+          ordered.push(`${item.name} — Full (${item.servesFull}) x${qty} @ ${priceUsed}`);
+        } else {
+          ordered.push(`${item.name} — ${size} x${qty} @ ${priceUsed}`);
+        }
       });
     }
 
@@ -222,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const total = parseFloat(document.getElementById("totalPrice").textContent || "0");
     const deposit = parseFloat(document.getElementById("deposit").textContent || "0");
     const est = document.getElementById("estimatedPeople").textContent || "0";
-    const confDays = [...document.querySelectorAll("input.confirmationDays:checked")].map(x=>x.value).join(", ");
+    const confDays = [...document.querySelectorAll("input[name='confirmationDays']:checked")].map(x=>x.value).join(", ");
 
     const summaryLines = [
       `Number of People: ${document.getElementById('people').value || ''}`,
