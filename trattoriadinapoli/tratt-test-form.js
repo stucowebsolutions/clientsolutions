@@ -533,7 +533,7 @@ document.addEventListener("DOMContentLoaded", function() {
      Initialize floating labels (for key inputs)
   */
   enhanceFloatingInputs([
-    '#name', '#email', '#phone', '#people', '#deliveryAddress', '#eventDate'
+    '#name', '#email', '#phone', '#people', '#deliveryAddress'
   ]);
 
   /* ---------------------------
