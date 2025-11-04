@@ -8,7 +8,7 @@
   --shadow: 0 2px 5px rgba(0,0,0,0.08);
   --input-border: rgba(0,0,0,0.12);
   --radius: 8px;
-  --error-height: 20px; /* reserve space for errors to avoid reflow */
+  --error-height: 20px; /* reserve space for errors */
 }
 html,body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:#fff;}
 .container{max-width:1100px;margin:18px auto;background:var(--bg);padding:28px;box-sizing:border-box;border-radius:var(--radius);}
@@ -35,7 +35,12 @@ form#catering-form{display:flex; flex-direction:column; gap:18px;background:tran
 button[type="submit"] { padding: 10px; font-size: 17px; background: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer; width: 100%; transition: all 0.18s ease; }
 button[type="submit"]:hover { opacity: 0.95; }
 
-/* --- Contact layout (flexible, replaces previous top-grid) --- */
+/* --- Top row layout --- */
+.top-row { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-start; }
+.top-row .field { flex: 1 1 200px; display:flex; flex-direction:column; }
+.field-sub { margin-top:6px; display:flex; flex-direction:column; }
+
+/* Contact Info layout */
 .contact-block { display:flex; flex-direction:column; gap:12px; }
 .contact-row { display:flex; gap:12px; align-items:flex-end; }
 .field { display:flex; flex-direction:column; width:100%; }
@@ -48,31 +53,14 @@ button[type="submit"]:hover { opacity: 0.95; }
 /* reserve error area to prevent bumping */
 .error-message { color: #c00; font-size: 13px; margin-top: 6px; min-height: var(--error-height); display:block; }
 
-/* floating labels styling (JS wraps inputs) */
+/* floating labels styling */
 .float-label-wrapper { position: relative; display: inline-block; width: 100%; margin-top:6px; }
 .float-label-wrapper input, .float-label-wrapper select, .float-label-wrapper textarea { width:100%; padding:12px 14px; border-radius:6px; border:1px solid var(--input-border); box-sizing:border-box; background:white; font-size:16px; }
 .float-label { position:absolute; left:14px; top:12px; font-weight:600; color:#666; pointer-events:none; font-size:15px; display:inline-block; }
-
-/* per-letter spans will animate; label itself doesn't translate so whole label won't move */
 .float-label span { display:inline-block; transform: translateY(0); }
-
-/* letter-by-letter wave animation */
-@keyframes float-wave {
-  0%   { transform: translateY(0); }
-  40%  { transform: translateY(-14px); }
-  70%  { transform: translateY(-6px); }
-  100% { transform: translateY(0); }
-}
-.float-label.wave-play span {
-  animation-name: float-wave;
-  animation-duration: 700ms;
-  animation-fill-mode: both;
-  animation-timing-function: cubic-bezier(0.2,0.8,0.2,1);
-}
-
-/* focused/has-value states (this moves the label up as visual, not animated -- works with spans) */
-.float-label-wrapper.focused .float-label,
-.float-label-wrapper.has-value .float-label { top: -10px; font-size:15px; color:var(--accent); }
+@keyframes float-wave {0%{transform: translateY(0);} 40%{transform: translateY(-14px);} 70%{transform: translateY(-6px);} 100%{transform: translateY(0);}}
+.float-label.wave-play span {animation-name: float-wave; animation-duration: 700ms; animation-fill-mode: both; animation-timing-function: cubic-bezier(0.2,0.8,0.2,1);}
+.float-label-wrapper.focused .float-label, .float-label-wrapper.has-value .float-label { top: -10px; font-size:15px; color:var(--accent); }
 
 /* Toggle styles */
 .pickup-toggle { display:flex; gap:8px; margin-top:6px; }
@@ -97,6 +85,7 @@ button:hover { background-color: green !important; color: white !important; }
 /* responsive */
 @media (max-width: 720px) {
   .contact-row { flex-direction: column; align-items: stretch; }
+  .top-row { flex-direction: column; }
   .menu-grid { grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); }
   .bottom-grid { flex-direction: column; }
 }
