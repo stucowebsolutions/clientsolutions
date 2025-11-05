@@ -47,20 +47,20 @@ button[type="submit"]:hover { opacity: 0.95; }
 .field input[type="text"], .field input[type="email"], .field input[type="tel"], .field input[type="number"], .field input[type="date"], .field select, .field input[type="search"] {
   padding:12px 10px; border:1px solid var(--input-border); border-radius:6px; font-size:16px; box-sizing:border-box; background:white;
 }
-.field .note { margin-top:6px; font-size:13px; color: #222; }
-.field .label-inline { font-weight:700; margin-bottom:6px; }
+.field .note { margin-top:2px; font-size:14px; color: #222; background: var(--accent); }
+.field .label-inline { font-weight:700; margin-bottom:6px; font-size:16px;}
 
 /* reserve error area to prevent bumping */
-.error-message { color: #c00; font-size: 13px; margin-top: 6px; min-height: var(--error-height); display:block; }
+.error-message { color: #c00; font-size: 14px; margin-top: 6px; min-height: var(--error-height); display:block; }
 
 /* floating labels styling */
 .float-label-wrapper { position: relative; display: inline-block; width: 100%; margin-top:6px; }
 .float-label-wrapper input, .float-label-wrapper select, .float-label-wrapper textarea { width:100%; padding:12px 14px; border-radius:6px; border:1px solid var(--input-border); box-sizing:border-box; background:white; font-size:16px; }
-.float-label { position:absolute; left:14px; top:12px; font-weight:600; color:#666; pointer-events:none; font-size:15px; display:inline-block; }
+.float-label { position:absolute; left:14px; top:12px; font-weight:700; color:var(--textmuted); pointer-events:none; font-size:15px; display:inline-block; }
 .float-label span { display:inline-block; transform: translateY(0); }
 @keyframes float-wave {0%{transform: translateY(0);} 40%{transform: translateY(-14px);} 70%{transform: translateY(-6px);} 100%{transform: translateY(0);}}
 .float-label.wave-play span {animation-name: float-wave; animation-duration: 700ms; animation-fill-mode: both; animation-timing-function: cubic-bezier(0.2,0.8,0.2,1);}
-.float-label-wrapper.focused .float-label, .float-label-wrapper.has-value .float-label { top: -10px; font-size:15px; color:var(--accent); }
+.float-label-wrapper.focused .float-label, .float-label-wrapper.has-value .float-label { top: -10px; font-size:18px; color:var(--textmuted); }
 
 /* Toggle styles */
 .pickup-toggle { display:flex; gap:8px; margin-top:6px; }
