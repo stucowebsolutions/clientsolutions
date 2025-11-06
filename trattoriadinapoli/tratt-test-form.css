@@ -5,6 +5,7 @@
   --accent: #7F1D1D;
   --text-dark: #1a1a1a;
   --text-muted: #F5F5F5;
+  --accentgreen: #09aa06;
   --shadow: 0 2px 5px rgba(0,0,0,0.08);
   --input-border: #FFD700;
   --radius: 8px;
@@ -54,7 +55,7 @@ button[type="submit"]:hover { opacity: 0.95; }
 .field .label-inline { font-weight:700; margin-bottom:6px; font-size:16px;}
 
 /* reserve error area to prevent bumping */
-.error-message { color: #c00; font-size: 14px; margin-top: 6px; min-height: var(--error-height); display:block; }
+.error-message { color: #c00; font-size: 14px; font-weight:400; margin-top: 6px; min-height: var(--error-height); display:block; }
 
 /* floating labels styling */
 .float-label-wrapper { position: relative; display: inline-block; width: 100%; margin-top:6px; }
