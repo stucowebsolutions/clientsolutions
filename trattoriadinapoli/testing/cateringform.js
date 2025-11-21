@@ -367,42 +367,6 @@ if (eventDateInput) {
     }
   });
 }
-
-  /* ---------------------------
-     Pickup / Delivery toggle logic + keyboard accessibility
-  */
-  const pickupBtn = document.getElementById("togglePickup"),
-        deliveryBtn = document.getElementById("toggleDelivery"),
-        pickupInput = document.getElementById("pickupDeliveryInput"),
-        deliveryWrapper = document.getElementById("deliveryWrapper");
-
-  function setPickup() {
-    pickupBtn.classList.add('toggle-active'); pickupBtn.classList.remove('toggle-inactive');
-    deliveryBtn.classList.remove('toggle-active'); deliveryBtn.classList.add('toggle-inactive');
-    if (pickupInput) pickupInput.value = 'pickup';
-    if (deliveryWrapper) deliveryWrapper.style.display = 'none';
-    pickupBtn.setAttribute('aria-pressed','true'); pickupBtn.setAttribute('aria-checked','true');
-    deliveryBtn.setAttribute('aria-pressed','false'); deliveryBtn.setAttribute('aria-checked','false');
-    clearError('deliveryAddress');
-  }
-  function setDelivery() {
-    deliveryBtn.classList.add('toggle-active'); deliveryBtn.classList.remove('toggle-inactive');
-    pickupBtn.classList.remove('toggle-active'); pickupBtn.classList.add('toggle-inactive');
-    if (pickupInput) pickupInput.value = 'delivery';
-    if (deliveryWrapper) deliveryWrapper.style.display = 'block';
-    pickupBtn.setAttribute('aria-pressed','false'); pickupBtn.setAttribute('aria-checked','false');
-    deliveryBtn.setAttribute('aria-pressed','true'); deliveryBtn.setAttribute('aria-checked','true');
-  }
-
-  if (pickupBtn) {
-    pickupBtn.addEventListener('click', setPickup);
-    pickupBtn.addEventListener('keydown', (e)=> { if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); setPickup(); }});
-  }
-  if (deliveryBtn) {
-    deliveryBtn.addEventListener('click', setDelivery);
-    deliveryBtn.addEventListener('keydown', (e)=> { if(e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); setDelivery(); }});
-  }
-
   /* ---------------------------
      Contact method logic (select-based)
   */
@@ -485,18 +449,13 @@ if (eventDateInput) {
     clearError('eventDate'); return true;
   }
   function validateEventTime() {
-  const el = document.getElementById("eventTime");
-  if (!el) return true; // in case the field doesn't exist
-  const value = el.value.trim();
+    const el = document.getElementById("eventTime");
+    if (!el) return true; // in case the field doesn't exist
+    const value = el.value.trim();
 
-  if (!value) {
-    showError("eventTime", "Please select an event time");
-    return false;
-  }
+    if (!value) { showError("eventTime", "Please select an event time"); return false; }
 
-  clearError("eventTime");
-  return true;
-}
+  clearError("eventTime"); return true; }
 
   function validateTimeframe() {
     if (contactMethod && contactMethod.value === 'phone') {
@@ -508,21 +467,11 @@ if (eventDateInput) {
     }
     clearError('timeframe'); return true;
   }
-  function validateDeliveryAddressIfNeeded() {
-    if (pickupInput && pickupInput.value === 'delivery') {
-      const el = document.getElementById('deliveryAddress');
-      if (!el) { showError('deliveryAddress','Please enter delivery address'); return false; }
-      const v = String(el.value || '').trim();
-      if (!v) { showError('deliveryAddress','Please enter delivery address'); return false; }
-    }
-    clearError('deliveryAddress'); return true;
-  }
-
   // attach blur/listeners (keyboard friendly)
-  ['name','email','phone','people','deliveryAddress'].forEach(id => {
+  ['name','email','phone','people'].forEach(id => {
     const input = document.getElementById(id);
     if (input) input.addEventListener('blur', () => {
-      const map = { name: validateName, email: validateEmail, phone: validatePhone, people: validatePeople, deliveryAddress: validateDeliveryAddressIfNeeded };
+      const map = { name: validateName, email: validateEmail, phone: validatePhone, people: validatePeople };
       map[id]?.();
     });
   });
@@ -540,7 +489,7 @@ if (eventDateInput) {
   if (form) {
     form.addEventListener('submit', function(e) {
       // run validators
-      const validators = [validateName, validateEmail, validatePhone, validatePeople, validateEventDate, validateTimeframe, validateDeliveryAddressIfNeeded];
+      const validators = [validateName, validateEmail, validatePhone, validatePeople, validateEventDate, validateTimeframe];
       for (const fn of validators) {
         if (!fn()) {
           e.preventDefault();
@@ -593,11 +542,10 @@ if (eventDateInput) {
       const summaryLines = [
         `Number of People: ${document.getElementById('people')?.value || ''}`,
         `Event Date: ${document.getElementById('eventDate')?.value || ''}`,
-        `Event Time: ${document.getElementById('eventTime')?.value || ''}`,
+        `Event Time(Pickup Time): ${document.getElementById('eventTime')?.value || ''}`,
         `Confirmation Method: ${document.getElementById('contactMethod')?.value || ''}`,
         `Confirmation Days: ${confDays}`,
         `Confirmation Timeframe: ${document.getElementById('startTime')?.value || ''} - ${document.getElementById('endTime')?.value || ''}`,
-        `Pickup/Delivery: ${pickupInput?.value || ''}`,
         '',
         'Ordered Items:',
         ...ordered,
@@ -625,7 +573,7 @@ if (eventDateInput) {
      Initialize floating labels (for key inputs)
   */
   enhanceFloatingInputs([
-    '#name', '#email', '#phone', '#people', '#deliveryAddress'
+    '#name', '#email', '#phone', '#people'
   ]);
 
   /* ---------------------------
