@@ -288,44 +288,85 @@ populateTimeSelect(endTime);
 populateTimeSelect(eventTime);
 
 
-/* ---------------------------
-   Flatpickr: 2-week minimum,
-   disable holidays,
-   disable Sundays + Mondays
----------------------------- */
+/* -------------------------------------------------
+   Flatpickr datepicker with:
+   • 2-week minimum
+   • Disabled major holidays (auto-calculated)
+   • Disabled Sundays + Mondays
+   • Tooltip reasons for each disabled date
+-------------------------------------------------- */
 
 const eventDateInput = document.getElementById("eventDate");
 
-const disabledHolidays = [
-  "2025-11-27",
-  "2025-12-25",
-  "2026-01-01",
-  // add more...
-];
+// Auto-calc major holidays each year
+function getHolidayDates(year) {
+  // Thanksgiving = 4th Thursday of November
+  const november = new Date(year, 10, 1);
+  let thursdays = [];
+  for (let d = 1; d <= 30; d++) {
+    let date = new Date(year, 10, d);
+    if (date.getDay() === 4) thursdays.push(date);
+  }
+  const thanksgiving = thursdays[3]; // 4th Thursday
+
+  return {
+    "Christmas Eve": `${year}-12-24`,
+    "Christmas Day": `${year}-12-25`,
+    "New Year's Eve": `${year}-12-31`,
+    "New Year's Day": `${year}-01-01`,
+    "Thanksgiving": thanksgiving.toISOString().split("T")[0]
+  };
+}
+
+const holidays = getHolidayDates(new Date().getFullYear());
+
+// Convert holiday map → array of {date, label}
+const holidayList = Object.entries(holidays).map(([label, date]) => ({
+  date,
+  label
+}));
 
 if (eventDateInput) {
   flatpickr(eventDateInput, {
     dateFormat: "Y-m-d",
     minDate: new Date().fp_incr(14),
+    disableMobile: true,
 
     disable: [
-      // Disable holidays
+      // Disable all holidays with tooltip
       function(date) {
         const iso = date.toISOString().split("T")[0];
-        return disabledHolidays.includes(iso);
+        const holiday = holidayList.find(h => h.date === iso);
+
+        if (holiday) {
+          date.__disabledReason = holiday.label;
+          return true;
+        }
+
+        return false;
       },
 
-      // Disable Sundays (0) and Mondays (1)
+      // Disable Sundays (0) + Mondays (1)
       function(date) {
         const day = date.getDay();
-        return day === 0 || day === 1;
+        if (day === 0 || day === 1) {
+          date.__disabledReason = day === 0 ? "Closed Sundays" : "Closed Mondays";
+          return true;
+        }
+
+        return false;
       }
     ],
 
-    disableMobile: true,
+    // Tooltip for hovered disabled dates
+    onDayCreate: function(_, __, ___, dayElem) {
+      const date = dayElem.dateObj;
+      if (date.__disabledReason) {
+        dayElem.setAttribute("title", date.__disabledReason);
+      }
+    }
   });
 }
-
 
   /* ---------------------------
      Pickup / Delivery toggle logic + keyboard accessibility
