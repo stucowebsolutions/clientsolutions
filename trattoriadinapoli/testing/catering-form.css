@@ -1,0 +1,96 @@
+:root{
+  --truebg:#ffffff;
+  --bg: #707070;
+  --card: #F5F5F5;
+  --muted: #faf9f7;
+  --accent: #7F1D1D;
+  --text-dark: #1a1a1a;
+  --text-muted: #F5F5F5;
+  --accentgreen: #09aa06;
+  --shadow: 0 2px 5px rgba(0,0,0,0.08);
+  --input-border: #9D7206;
+  --radius: 8px;
+  --error-height: 20px; /* reserve space for errors */
+}
+html,body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;background:var(--truebg);}
+.container{max-width:1100px;margin:auto;background:var(--bg);padding:28px;box-sizing:border-box;border-radius:var(--radius);}
+.form-note{background: var(--accent);color: white;text-align: center;padding: 10px 16px;border-radius: var(--radius);font-size: 20px;font-weight: 600;margin-bottom: 22px;box-shadow: var(--shadow);}
+form#catering-form{display:flex; flex-direction:column; gap:18px;background:transparent;padding-bottom:8px;}
+.section-title{ margin:6px 0 4px 0; font-size:26px; color:var(--text-dark); }
+.menu-section{ margin-top:6px; }
+.menu-section h4{ margin:8px 0; font-size:24px; color:var(--text-dark); border-bottom:1px solid rgba(0,0,0,0.06); padding-bottom:6px; }
+.menu-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap:8px; }
+.menu-item{ background:var(--card); padding:8px; border-radius:6px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:6px; font-size:15px; }
+.menu-item .top-line{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.menu-item .top-line .item-name{ font-size:18px; font-weight:700; }
+.menu-options{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.menu-options .menu-size, .menu-options .menu-price, .menu-options input.menu-qty, .menu-options .size-text{ font-size:18px; }
+.menu-options .menu-price{ min-width:70px; text-align:right; font-weight:600; }
+.menu-options input.menu-qty{ width:64px; padding:6px; border-radius:6px; border:1px solid var(--input-border); font-size:18px; }
+.menu-options .size-text{ min-width:90px; font-weight:500; }
+
+.bottom-grid { display: flex; gap: 16px; margin-top: 20px; align-items: stretch; }
+.bottom-left, .bottom-right { border-radius: 8px; padding: 12px; box-shadow: var(--shadow); background: var(--card); }
+.bottom-left { flex: 1 1 40%; }
+.bottom-right { flex: 1 1 60%; display: flex; flex-direction: column; justify-content: space-between; }
+.fineprint { background: var(--muted); padding: 10px; border-radius: 6px; font-size: 16px; color: var(--text-dark); flex: 1; }
+button[type="submit"] { padding: 10px; font-size: 17px; background: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer; width: 100%; transition: all 0.18s ease; }
+button[type="submit"]:hover { opacity: 0.95; }
+
+/* --- Top row layout --- */
+.top-row { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-start; }
+.top-row .field { flex: 1 1 200px; display:flex; flex-direction:column; }
+.field-sub { margin-top:6px; display:flex; flex-direction:column; }
+
+/* Contact Info layout */
+.contact-block { display:flex; flex-direction:column; gap:12px; }
+.contact-row { display:flex; gap:12px; align-items:flex-end; }
+.field { display:flex; flex-direction:column; width:100%; }
+.field input[type="text"], .field input[type="email"], .field input[type="tel"], .field input[type="number"], .field select, .field input[type="search"] {
+  padding:12px 10px; border:1px solid var(--input-border); border-radius:6px; font-size:16px; box-sizing:border-box; background:white;
+}
+.field input[type="date"]{
+  padding:12px; border:1px solid var(--input-border); border-radius:6px; font-size:16px; box-sizing:border-box; background:white;
+}
+.field .note { margin-top:2px; font-size:14px; background: var(--accent);color: white;text-align: center;border-radius: var(--radius); }
+.field .label-inline { font-weight:700; margin-bottom:6px; font-size:16px;}
+
+/* reserve error area to prevent bumping */
+.error-message { color: #c00; font-size: 14px; font-weight:400; margin-top: 6px; min-height: var(--error-height); display:block; }
+
+/* floating labels styling */
+.float-label-wrapper { position: relative; display: inline-block; width: 100%; margin-top:6px; }
+.float-label-wrapper input, .float-label-wrapper select, .float-label-wrapper textarea { width:100%; padding:12px 14px; border-radius:6px; border:1px solid var(--input-border); box-sizing:border-box; background:white; font-size:16px; }
+.float-label { position:absolute; left:14px; top:12px; font-weight:700; color:var(--textmuted); pointer-events:none; font-size:15px; display:inline-block; }
+.float-label span { display:inline-block; transform: translateY(0); }
+@keyframes float-wave {0%{transform: translateY(0);} 40%{transform: translateY(-14px);} 70%{transform: translateY(-6px);} 100%{transform: translateY(0);}}
+.float-label.wave-play span {animation-name: float-wave; animation-duration: 700ms; animation-fill-mode: both; animation-timing-function: cubic-bezier(0.2,0.8,0.2,1);}
+.float-label-wrapper.focused .float-label, .float-label-wrapper.has-value .float-label { top: -10px; font-size:18px; color:var(--textmuted); }
+
+/* Toggle styles */
+.pickup-toggle { display:flex; gap:8px; margin-top:6px; }
+.toggle-btn { flex:1; padding:8px 10px; border-radius:6px; border:1px solid var(--input-border); background:#fff; color:#000; cursor:pointer; }
+.toggle-active { background: var(--accent) !important; color: #fff !important; }
+.toggle-inactive { background: #fff !important; color: #000 !important; }
+
+/* contact reach wrapper */
+#reachWrapper { border: 1px solid var(--input-border); border-radius: 6px; padding: 12px; margin-top: 6px; background: var(--muted); }
+
+/* menu toggle behavior (hidden until active) */
+.menu-item .menu-options { display: none; }
+.menu-item.active .menu-options { display: flex; gap: 8px; align-items:center; flex-wrap:wrap; }
+
+/* small helpers */
+.visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; }
+.label-inline { font-weight:700; margin-bottom:6px; font-size:15px; }
+
+/* green hover as requested */
+button:hover { background-color: green !important; color: white !important; }
+
+/* responsive */
+@media (max-width: 720px) {
+  .contact-row { flex-direction: column; align-items: stretch; }
+  .top-row { flex-direction: column; }
+  .menu-grid { grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); }
+  .bottom-grid { flex-direction: column; }
+}
