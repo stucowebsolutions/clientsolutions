@@ -1,0 +1,135 @@
+<link rel="stylesheet" href="https://stucowebsolutions.github.io/TrattoriaDiNapoli/css/catering-form.css" />
+
+<div class="container">
+  <div class="form-note" id="formNote">
+    This form is a catering request — submission does <strong>NOT</strong> confirm your order. Confirmation will be sent via email or phone.
+  </div>
+
+  <form id="catering-form" action="https://formspree.io/f/mblzpbzq" method="POST" novalidate>
+
+    <!-- Contact Info -->
+    <div class="contact-block">
+      <div class="contact-row">
+        <div class="field">
+          <input id="name" name="name" required type="text" placeholder="Full Name*" aria-describedby="err-name">
+          <span class="error-message" id="err-name" role="alert" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <input id="email" name="email" required type="email" placeholder="Email*" aria-describedby="err-email">
+          <span class="error-message" id="err-email" role="alert" aria-live="polite"></span>
+        </div>
+      </div>
+
+      <div class="contact-row">
+        <div class="field">
+          <input id="phone" name="phone" required type="tel" placeholder="Phone*" aria-describedby="err-phone">
+          <span class="error-message" id="err-phone" role="alert" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <input id="people" name="people" required type="number" min="1" placeholder="Number of People*" aria-describedby="err-people">
+          <span class="error-message" id="err-people" role="alert" aria-live="polite"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Event + Pickup/Delivery + Contact Method Row -->
+    <div class="top-row">
+      <!-- Event Date -->
+      <div class="field">
+        <label for="eventDate" class="label-inline">Event Date *</label>
+        <input id="eventDate" name="eventDate" required type="date" aria-describedby="err-eventDate">
+        <span class="error-message" id="err-eventDate" role="alert" aria-live="polite"></span>
+        <small class="note">*(Orders must be placed at least two weeks in advance.)</small>
+      </div>
+<!-- Event Time -->
+<div class="field">
+  <label for="eventTime" class="label-inline">Event Time *</label>
+  <select id="eventTime" name="eventTime" required aria-describedby="err-eventTime">
+    <option value="">Select Time</option>
+  </select>
+  <span class="error-message" id="err-eventTime" role="alert" aria-live="polite"></span>
+</div>
+
+      <!-- Pickup / Delivery -->
+      <div class="field">
+        <div class="label-inline">Pickup / Delivery *</div>
+        <div class="pickup-toggle" role="group" aria-label="Pickup or Delivery">
+          <button type="button" id="togglePickup" class="toggle-btn toggle-active" aria-pressed="true" aria-checked="true" role="switch">Pickup</button>
+          <button type="button" id="toggleDelivery" class="toggle-btn toggle-inactive" aria-pressed="false" aria-checked="false" role="switch">Delivery</button>
+        </div>
+        <input type="hidden" name="pickupDelivery" id="pickupDeliveryInput" value="pickup">
+
+        <!-- Conditional Delivery Address -->
+        <div id="deliveryWrapper" style="display:none; margin-top:6px;">
+          <input id="deliveryAddress" name="deliveryAddress" placeholder="Delivery Address" aria-describedby="err-deliveryAddress">
+          <span class="error-message" id="err-deliveryAddress" role="alert" aria-live="polite"></span>
+        </div>
+      </div>
+
+      <!-- Preferred Contact Method -->
+      <div class="field">
+        <label for="contactMethod" class="label-inline">Preferred Contact Method *</label>
+        <select id="contactMethod" required aria-describedby="err-contactMethod">
+          <option value="">Select Method</option>
+          <option value="email">Email</option>
+          <option value="phone">Phone</option>
+        </select>
+        <span class="error-message" id="err-contactMethod" role="alert" aria-live="polite"></span>
+
+        <!-- Conditional "When can we reach you?" -->
+        <div id="reachWrapper" style="display:none; margin-top:6px;">
+          <h3 class="section-title">When can we reach you?</h3>
+
+          <div class="field-sub">
+            <div class="label-inline">Days *</div>
+            <div class="days-list" role="group" aria-label="Preferred days to reach you">
+              <label><input type="checkbox" name="confirmationDays" value="Tuesday"> Tue</label>
+              <label><input type="checkbox" name="confirmationDays" value="Wednesday"> Wed</label>
+              <label><input type="checkbox" name="confirmationDays" value="Thursday"> Thu</label>
+              <label><input type="checkbox" name="confirmationDays" value="Friday"> Fri</label>
+              <label><input type="checkbox" name="confirmationDays" value="Saturday"> Sat</label>
+            </div>
+            <span class="error-message" id="err-timeframe" role="alert" aria-live="polite"></span>
+          </div>
+
+          <div class="field-sub">
+            <div class="label-inline">Time *</div>
+            <div style="display:flex; gap:8px; margin-top:6px;">
+              <select id="startTime" aria-label="Start time"><option value="">Start</option></select>
+              <select id="endTime" aria-label="End time"><option value="">End</option></select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu Section -->
+    <h3 class="section-title">Place Your Order</h3>
+    <div id="menuContainer" aria-live="polite"></div>
+
+    <!-- Totals + Submit -->
+    <div class="bottom-grid">
+      <div class="bottom-left" aria-hidden="false">
+        <h4 style="margin:0 0 6px 0;">Estimated Total</h4>
+        <div>Subtotal: $<span id="subtotal">0.00</span></div>
+        <div>Service Charge (20%): $<span id="serviceCharge">0.00</span></div>
+        <div><strong>Total: $<span id="totalPrice">0.00</span></strong></div>
+        <div>Deposit (50%): $<span id="deposit">0.00</span></div>
+        <div>Estimated Servings: <span id="estimatedPeople">0</span> people</div>
+      </div>
+      <div class="bottom-right">
+        <div class="fineprint">
+          *(50% non-refundable deposit required within 24 hours of confirmation for online booking.)<br>
+          *(Remaining balance due one week before event.)<br>
+          *(A 20% service charge is added to all catering orders.)<br>
+          *(All unfilled portions of this form will be reviewed during confirmation.)
+        </div>
+        <button type="submit">Submit Catering Request</button>
+      </div>
+    </div>
+
+    <textarea name="summary" id="summaryField" hidden></textarea>
+  </form>
+</div>
+
+<script src="https://stucowebsolutions.github.io/TrattoriaDiNapoli/js/catering-form.js" defer></script>
