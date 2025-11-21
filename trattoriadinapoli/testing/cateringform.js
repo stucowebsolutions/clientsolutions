@@ -288,36 +288,44 @@ populateTimeSelect(endTime);
 populateTimeSelect(eventTime);
 
 
- /* ---------------------------
-   Flatpickr datepicker with:
-   • 2-week minimum
-   • disabled holidays
+/* ---------------------------
+   Flatpickr: 2-week minimum,
+   disable holidays,
+   disable Sundays + Mondays
 ---------------------------- */
 
 const eventDateInput = document.getElementById("eventDate");
 
-// list all holidays you want blocked
 const disabledHolidays = [
-  "2025-11-27", // Thanksgiving 
-  "2025-12-25", // Christmas
-  "2026-01-01", // New Years Day
-  
+  "2025-11-27",
+  "2025-12-25",
+  "2026-01-01",
+  // add more...
 ];
 
 if (eventDateInput) {
   flatpickr(eventDateInput, {
     dateFormat: "Y-m-d",
-    minDate: new Date().fp_incr(14),   // 14 days from today
+    minDate: new Date().fp_incr(14),
+
     disable: [
+      // Disable holidays
       function(date) {
-        // block holidays
         const iso = date.toISOString().split("T")[0];
         return disabledHolidays.includes(iso);
+      },
+
+      // Disable Sundays (0) and Mondays (1)
+      function(date) {
+        const day = date.getDay();
+        return day === 0 || day === 1;
       }
     ],
-    disableMobile: true, // force consistent UI
+
+    disableMobile: true,
   });
 }
+
 
   /* ---------------------------
      Pickup / Delivery toggle logic + keyboard accessibility
