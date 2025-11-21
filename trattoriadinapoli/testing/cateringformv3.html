@@ -1,4 +1,6 @@
-<link rel="stylesheet" href="https://stucowebsolutions.github.io/TrattoriaDiNapoli/css/catering-form.css" />
+<link rel="stylesheet" href="https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/testing/catering-form.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <div class="container">
   <div class="form-note" id="formNote">
@@ -43,28 +45,12 @@
       </div>
 <!-- Event Time -->
 <div class="field">
-  <label for="eventTime" class="label-inline">Event Time *</label>
+  <label for="eventTime" class="label-inline">Pickup Time *</label>
   <select id="eventTime" name="eventTime" required aria-describedby="err-eventTime">
     <option value="">Select Time</option>
   </select>
   <span class="error-message" id="err-eventTime" role="alert" aria-live="polite"></span>
 </div>
-
-      <!-- Pickup / Delivery -->
-      <div class="field">
-        <div class="label-inline">Pickup / Delivery *</div>
-        <div class="pickup-toggle" role="group" aria-label="Pickup or Delivery">
-          <button type="button" id="togglePickup" class="toggle-btn toggle-active" aria-pressed="true" aria-checked="true" role="switch">Pickup</button>
-          <button type="button" id="toggleDelivery" class="toggle-btn toggle-inactive" aria-pressed="false" aria-checked="false" role="switch">Delivery</button>
-        </div>
-        <input type="hidden" name="pickupDelivery" id="pickupDeliveryInput" value="pickup">
-
-        <!-- Conditional Delivery Address -->
-        <div id="deliveryWrapper" style="display:none; margin-top:6px;">
-          <input id="deliveryAddress" name="deliveryAddress" placeholder="Delivery Address" aria-describedby="err-deliveryAddress">
-          <span class="error-message" id="err-deliveryAddress" role="alert" aria-live="polite"></span>
-        </div>
-      </div>
 
       <!-- Preferred Contact Method -->
       <div class="field">
@@ -132,4 +118,4 @@
   </form>
 </div>
 
-<script src="https://stucowebsolutions.github.io/TrattoriaDiNapoli/js/catering-form.js" defer></script>
+<script src="https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/testing/cateringform.js" defer></script>
