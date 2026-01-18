@@ -394,8 +394,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
       try{
         showToast('Submitting your request...');
-        const res=await fetch('https://script.google.com/macros/s/AKfycbyPngXXnnT30UD4R44WRHdiskBHArENEdlIjjPcATrXB0aEr9Qt6KcWDGdZKVlYf9xK/exec',{
+        const res=await fetch('https://script.google.com/macros/s/AKfycbylBFFJUyZHxBpMZdSA6zBWjwl3XJcA3CcKiyVqCQnGSnb66jzVKor9keBZFt9q1GO3/exec',{
           method:'POST',
+          mode: "no-cors",
           headers:{'Content-Type':'application/json'},
           body:JSON.stringify(payload)
         });
