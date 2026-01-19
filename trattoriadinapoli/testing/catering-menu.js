@@ -1,4 +1,4 @@
-const MENU_ENDPOINT = "https://script.google.com/macros/s/AKfycbwatAsc-09YgBpHczXp3Za8f287kRSH2oJHD5olfuzg7CfzTmMv0v0GWQe3MMmelw/exec";
+const MENU_ENDPOINT = "https://script.google.com/macros/s/AKfycbzHZh1cxpyVnQDdD0GuU95wWbhQTplJ7_w4--jEhqQLAuKY89RaOi51S-t18kFdyCdl/exec";
 
 async function loadCateringMenu() {
   try {
