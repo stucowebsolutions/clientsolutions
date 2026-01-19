@@ -1,4 +1,3 @@
-/* Container */
 #catering-menu-container {
   font-family: 'Arial', sans-serif;
   max-width: 900px;
@@ -6,7 +5,6 @@
   padding: 1rem;
 }
 
-/* Category Headers */
 .catering-category {
   font-size: 1.5rem;
   font-weight: bold;
@@ -15,30 +13,42 @@
   padding-bottom: 0.3rem;
 }
 
-/* Item rows */
+/* Flex row: left info + right pricing */
 .catering-item {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
   padding: 0.5rem 0;
   border-bottom: 1px dotted #eee;
 }
 
-.catering-item-name {
+.catering-item-left {
+  flex: 1 1 65%;
+}
+
+.catering-item-right {
+  flex: 1 1 30%;
+  text-align: right;
   font-weight: 600;
-  flex: 1 1 50%;
+  color: #333;
+}
+
+/* Text styles */
+.catering-item-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.catering-item-size {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.1rem;
 }
 
 .catering-item-description {
-  flex: 1 1 100%;
   font-size: 0.9rem;
   color: #555;
   margin-top: 0.2rem;
-}
-
-.catering-item-pricing {
-  flex: 1 1 40%;
-  text-align: right;
-  font-weight: 500;
-  color: #333;
 }
