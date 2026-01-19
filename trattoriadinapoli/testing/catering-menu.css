@@ -1,0 +1,44 @@
+/* Container */
+#catering-menu-container {
+  font-family: 'Arial', sans-serif;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Category Headers */
+.catering-category {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 2rem;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.3rem;
+}
+
+/* Item rows */
+.catering-item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px dotted #eee;
+}
+
+.catering-item-name {
+  font-weight: 600;
+  flex: 1 1 50%;
+}
+
+.catering-item-description {
+  flex: 1 1 100%;
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.2rem;
+}
+
+.catering-item-pricing {
+  flex: 1 1 40%;
+  text-align: right;
+  font-weight: 500;
+  color: #333;
+}
