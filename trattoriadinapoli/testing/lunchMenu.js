@@ -29,7 +29,7 @@ function renderLunchItem(item) {
 
   el.innerHTML = `
     <div class="menu-item-header">
-      <span class="menu-item-name">${item.name}</span>
+      <span class="menu-item-name">${item.itemName}</span>
       <span class="menu-item-price">
         ${formatPrice(item.price)}
       </span>
