@@ -19,9 +19,9 @@ async function fetchMenu(menuName) {
  * Format price display safely
  */
 function formatPrice({ small, large, fixed }, isCatering = false) {
-  if (fixed) return isCatering ? `${fixed}` : `$${fixed}`;
-  if (small && large) return isCatering ? `${small}(Half)/${large}(Full)` : `$${small} / $${large}`;
-  if (small) return isCatering ? `${small}` : `$${small}`;
+  if (fixed) return isCatering ? `${fixed}` : `${fixed}`;
+  if (small && large) return isCatering ? `${small}(Half)/${large}(Full)` : `${small} / ${large}`;
+  if (small) return isCatering ? `${small}` : `${small}`;
   return "";
 }
 
