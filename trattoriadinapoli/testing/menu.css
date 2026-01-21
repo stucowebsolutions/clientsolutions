@@ -1,0 +1,245 @@
+/* =========================
+   Base Reset & Variables
+========================= */
+
+:root {
+  --text-primary: #1f2933;
+  --text-secondary: #616e7c;
+  --border-light: #e4e7eb;
+  --accent: #8b1e1e;
+
+  --price-width: 90px;
+  --max-content-width: 900px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text-primary);
+}
+
+/* =========================
+   Page Layout
+========================= */
+
+.menu-page {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.menu-header {
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 16px;
+}
+
+.menu-header h1 {
+  font-size: 2rem;
+  margin: 0 0 4px;
+}
+
+.menu-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* =========================
+   Category Navigation
+========================= */
+
+.menu-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0 32px;
+}
+
+.menu-nav a {
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--accent);
+  border: 1px solid var(--border-light);
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.menu-nav a:hover {
+  background: #f8f9fa;
+}
+
+/* =========================
+   Category Sections
+========================= */
+
+.menu-category {
+  margin-bottom: 40px;
+}
+
+.menu-category h2 {
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+
+.menu-category-description {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+/* Anchor offset for fixed headers (future-proof) */
+.menu-category {
+  scroll-margin-top: 80px;
+}
+
+/* =========================
+   Menu Items
+========================= */
+
+.menu-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menu-item-name {
+  font-weight: 600;
+}
+
+.menu-item-size {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.menu-item-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* =========================
+   Price Columns
+========================= */
+
+.menu-item-prices {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: var(--price-width);
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.menu-price {
+  font-weight: 600;
+}
+
+.menu-price.secondary {
+  font-weight: 400;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+/* =========================
+   Catering-Specific Styling
+========================= */
+
+.catering-menu .menu-item {
+  padding: 18px 0;
+}
+
+.catering-menu .menu-item-prices {
+  gap: 6px;
+}
+
+.catering-menu .menu-price small {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* =========================
+   Skeleton Loaders
+========================= */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e4e4e4 37%,
+    #f0f0f0 63%
+  );
+  background-size: 400% 100%;
+  animation: skeleton-loading 1.4s ease infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.skeleton-text {
+  height: 14px;
+  width: 100%;
+}
+
+.skeleton-title {
+  height: 22px;
+  width: 60%;
+  margin-bottom: 8px;
+}
+
+.skeleton-price {
+  height: 16px;
+  width: 50px;
+}
+
+/* =========================
+   Print / PDF Optimization
+========================= */
+
+@media print {
+  body {
+    color: #000;
+  }
+
+  .menu-nav {
+    display: none;
+  }
+
+  .menu-page {
+    padding: 0;
+  }
+
+  .menu-item {
+    break-inside: avoid;
+  }
+
+  .menu-category {
+    page-break-inside: avoid;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
