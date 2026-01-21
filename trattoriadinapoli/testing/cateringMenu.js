@@ -12,8 +12,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     container.innerHTML = "";
     renderCateringMenu(menu);
-    renderCategoryNav(Object.keys(menu));
-  } catch (err) {
+     }
+     
+  catch (err) {
     console.error(err);
     container.innerHTML = "<p>Failed to load menu.</p>";
   }
