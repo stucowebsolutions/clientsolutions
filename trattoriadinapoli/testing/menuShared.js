@@ -1,62 +1,53 @@
 /* ============================
-   Menu Renderer (Shared)
+   Shared Menu Rendering
 ============================ */
 
 /**
- * Render category header
+ * Render a category header with anchor ID
+ * @param {string} title
+ * @param {string} description
  */
 function renderCategoryHeader(title, description) {
   const el = document.createElement("div");
   el.className = "menu-category";
+  // Create a safe ID for anchor links
+  const anchorId = title.toLowerCase().replace(/\s+/g, "-");
 
+  el.id = anchorId;
   el.innerHTML = `
     <h2 class="menu-category-title">${title}</h2>
     ${description ? `<p class="menu-category-description">${description}</p>` : ""}
   `;
 
-  return el;
-}
-
-/**
- * Render a menu item (works for all menus)
- */
-function renderMenuItem(item, isCatering = false) {
-  const el = document.createElement("div");
-  el.className = `menu-item${isCatering ? " catering" : ""}`;
-
-  const priceText = formatPrice(item.price, isCatering);
-  const servingsText = isCatering ? formatServings(item.servings) : "";
-
-  el.innerHTML = `
-    <div class="menu-item-header">
-      <span class="menu-item-name">${item.itemName || ""}</span>
-      <span class="menu-item-price">${priceText}</span>
-    </div>
-
-    ${item.sizeLabel ? `<div class="menu-item-size">${item.sizeLabel}</div>` : ""}
-    ${servingsText ? `<div class="menu-item-servings">${servingsText}</div>` : ""}
-    ${item.description ? `<div class="menu-item-description">${item.description}</div>` : ""}
-    ${item.choice ? `<div class="menu-item-choice">${item.choice}</div>` : ""}
-  `;
+  // Add a horizontal line below category title
+  const hr = document.createElement("hr");
+  el.appendChild(hr);
 
   return el;
 }
 
 /**
- * Render full menu
+ * Generate top-of-page jump links for categories
+ * @param {Array<string>} categories - array of category titles
  */
-function renderMenu(menuData, containerSelector, isCatering = false) {
-  const container = document.querySelector(containerSelector);
-  if (!container) return;
+function renderCategoryNav(categories) {
+  const nav = document.getElementById("menu-nav");
+  if (!nav) return;
 
-  container.innerHTML = "";
-
-  Object.entries(menuData).forEach(([category, data]) => {
-    const catEl = renderCategoryHeader(category, data.description);
-    container.appendChild(catEl);
-
-    data.items.forEach(item => {
-      catEl.appendChild(renderMenuItem(item, isCatering));
-    });
+  nav.innerHTML = ""; // Clear existing links
+  categories.forEach(title => {
+    const link = document.createElement("a");
+    link.href = `#${title.toLowerCase().replace(/\s+/g, "-")}`;
+    link.textContent = title;
+    nav.appendChild(link);
   });
+}
+
+/**
+ * Utility: Clear skeleton loader after menu is rendered
+ */
+function clearSkeleton() {
+  const container = document.getElementById("menu");
+  const skeletons = container.querySelectorAll(".skeleton");
+  skeletons.forEach(s => s.remove());
 }
