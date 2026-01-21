@@ -21,21 +21,3 @@ function renderCategoryHeader(title, description) {
   return el;
 }
 
-/**
- * Render category nav jump links
- * @param {string[]} categories
- */
-function renderCategoryNav(categories) {
-  const nav = document.getElementById("menu-nav");
-  if (!nav) return;
-
-  nav.innerHTML = ""; // clear existing links
-
-  categories.forEach(cat => {
-    const slug = slugify(cat);
-    const link = document.createElement("a");
-    link.href = `#${slug}`;
-    link.textContent = cat;
-    nav.appendChild(link);
-  });
-}
