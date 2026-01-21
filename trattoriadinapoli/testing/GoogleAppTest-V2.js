@@ -97,12 +97,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
   const menuContainer = document.getElementById("menuContainer");
 
-  function createMenuItemCard(item, categoryKey) {
+  function createMenuItemCard(item, categoryKey, itemIndex) {
     const card = document.createElement('div');
     card.className = 'menu-item';
 
     const top = document.createElement('div'); top.className = 'top-line';
     const cb = document.createElement('input'); cb.type = 'checkbox'; cb.className = 'menu-checkbox';
+    cb.setAttribute('aria-label', `Add ${item.name}`);
     top.appendChild(cb);
 
     const nameSpan = document.createElement('div'); nameSpan.className = 'item-name'; nameSpan.textContent = item.name;
@@ -112,67 +113,220 @@ document.addEventListener("DOMContentLoaded", function() {
     const optionsRow = document.createElement('div'); optionsRow.className = 'menu-options';
 
     if (item.perPerson || (!item.priceHalf && item.priceFull && categoryKey === 'Desserts')) {
-      optionsRow.innerHTML = `<div class="size-text">${item.perPerson?'Per Person':'Full'}</div><div class="menu-price">$${item.priceFull}</div>`;
-      const qty = document.createElement('input'); qty.type='number'; qty.min='1'; qty.value='1'; qty.className='menu-qty';
-      optionsRow.appendChild(qty);
+      const sizeDiv = document.createElement('div'); sizeDiv.className = 'size-text';
+      sizeDiv.textContent = item.perPerson ? 'Per Person' : (item.servesFull ? `Full (${item.servesFull})` : 'Full');
+
+      const priceDiv = document.createElement('div'); priceDiv.className = 'menu-price'; priceDiv.textContent = `$${item.priceFull}`;
+
+      const qty = document.createElement('input'); qty.type = 'number'; qty.min = '1'; qty.value = '1'; qty.className = 'menu-qty';
+      qty.setAttribute('aria-label', `Quantity for ${item.name}`);
+
+      optionsRow.appendChild(sizeDiv); optionsRow.appendChild(priceDiv); optionsRow.appendChild(qty);
+
     } else if (item.priceHalf && item.priceFull) {
-      optionsRow.innerHTML = `<div class="size-text">Half (${item.servesHalf}) / Full (${item.servesFull})</div>`;
-      const select=document.createElement('select'); select.className='menu-size';
-      select.innerHTML=`<option value="half">Half - $${item.priceHalf}</option><option value="full">Full - $${item.priceFull}</option>`;
-      const qty=document.createElement('input'); qty.type='number'; qty.min='1'; qty.value='1'; qty.className='menu-qty';
-      optionsRow.appendChild(select); optionsRow.appendChild(qty);
+      const sizeDiv = document.createElement('div'); sizeDiv.className = 'size-text';
+      sizeDiv.textContent = `Half (${item.servesHalf}) / Full (${item.servesFull})`;
+
+      const select = document.createElement('select'); select.className = 'menu-size';
+      const optHalf = document.createElement('option'); optHalf.value = 'half'; optHalf.textContent = `Half - $${item.priceHalf}`;
+      const optFull = document.createElement('option'); optFull.value = 'full'; optFull.textContent = `Full - $${item.priceFull}`;
+      select.appendChild(optHalf); select.appendChild(optFull);
+
+      const qty = document.createElement('input'); qty.type = 'number'; qty.min = '1'; qty.value = '1'; qty.className = 'menu-qty';
+      qty.setAttribute('aria-label', `Quantity for ${item.name}`);
+
+      optionsRow.appendChild(sizeDiv); optionsRow.appendChild(select); optionsRow.appendChild(qty);
+
     } else {
-      optionsRow.innerHTML = `<div class="size-text">Full</div><div class="menu-price">$${item.priceFull}</div>`;
-      const qty=document.createElement('input'); qty.type='number'; qty.min='1'; qty.value='1'; qty.className='menu-qty';
-      optionsRow.appendChild(qty);
+      const sizeDiv = document.createElement('div'); sizeDiv.className = 'size-text';
+      sizeDiv.textContent = item.servesFull ? `Full (${item.servesFull})` : 'Full';
+
+      const priceDiv = document.createElement('div'); priceDiv.className = 'menu-price'; priceDiv.textContent = `$${item.priceFull}`;
+
+      const qty = document.createElement('input'); qty.type = 'number'; qty.min = '1'; qty.value = '1'; qty.className = 'menu-qty';
+      qty.setAttribute('aria-label', `Quantity for ${item.name}`);
+
+      optionsRow.appendChild(sizeDiv); optionsRow.appendChild(priceDiv); optionsRow.appendChild(qty);
     }
 
     card.appendChild(optionsRow);
 
-    cb.addEventListener('change', ()=>{card.classList.toggle('active',cb.checked);calculateTotals();});
-    optionsRow.addEventListener('input',calculateTotals);
-    optionsRow.addEventListener('change',calculateTotals);
+    cb.addEventListener('change', () => {
+      card.classList.toggle('active', cb.checked);
+      calculateTotals();
+    });
+    optionsRow.addEventListener('input', calculateTotals);
+    optionsRow.addEventListener('change', calculateTotals);
 
     return card;
   }
 
-  for(const cat in menuData){
-    const section=document.createElement('div');
-    section.innerHTML=`<h4>${cat}</h4>`;
-    const grid=document.createElement('div');
-    menuData[cat].forEach(i=>grid.appendChild(createMenuItemCard(i,cat)));
+  // populate menu DOM
+  for (const category in menuData) {
+    const section = document.createElement('div'); section.className = 'menu-section';
+    section.innerHTML = `<h4 style="margin:0 0 8px 0;">${category}</h4>`;
+    const grid = document.createElement('div'); grid.className = 'menu-grid';
+    menuData[category].forEach((item, idx) => {
+      const card = createMenuItemCard(item, category, idx);
+      grid.appendChild(card);
+    });
     section.appendChild(grid);
     menuContainer.appendChild(section);
   }
 
   /* ---------------- Totals ---------------- */
-  const subtotalEl=document.getElementById("subtotal"),
-        serviceEl=document.getElementById("serviceCharge"),
-        totalEl=document.getElementById("totalPrice"),
-        depositEl=document.getElementById("deposit"),
-        estEl=document.getElementById("estimatedPeople");
+  const subtotalEl = document.getElementById("subtotal"),
+        serviceEl = document.getElementById("serviceCharge"),
+        totalEl = document.getElementById("totalPrice"),
+        depositEl = document.getElementById("deposit"),
+        estEl = document.getElementById("estimatedPeople");
 
   function calculateTotals(){
-    let subtotal=0, servings=0;
-    const cards=menuContainer.querySelectorAll(".menu-item");
-    let idx=0;
-    for(const cat in menuData){
-      menuData[cat].forEach(item=>{
-        const c=cards[idx++]; if(!c.querySelector(".menu-checkbox")?.checked) return;
-        const qty=parseInt(c.querySelector(".menu-qty")?.value||1,10);
-        const size=c.querySelector(".menu-size")?.value||"full";
-        if(item.perPerson){subtotal+=item.priceFull*qty;servings+=qty;}
-        else if(item.priceHalf){const p=size==="half"?item.priceHalf:item.priceFull;const s=size==="half"?item.servesHalf:item.servesFull;subtotal+=p*qty;servings+=s*qty;}
-        else{subtotal+=item.priceFull*qty;servings+=item.servesFull||1;}
+    let subtotal=0, totalServings=0;
+    const itemCards = menuContainer.querySelectorAll(".menu-item");
+    let idx = 0;
+    for (const category in menuData) {
+      menuData[category].forEach(item => {
+        const card = itemCards[idx++];
+        const checked = card.querySelector(".menu-checkbox");
+        if (!checked || !checked.checked) return;
+        const qtyEl = card.querySelector(".menu-qty");
+        const qty = parseInt(qtyEl?.value || "0", 10) || 0;
+        const sizeSel = card.querySelector(".menu-size");
+        const size = sizeSel ? (sizeSel.value || "full") : "full";
+
+        if (item.perPerson) {
+          subtotal += item.priceFull * qty;
+          totalServings += (item.servesFull || 1) * qty;
+        } else if (item.priceHalf && item.priceFull) {
+          const price = (size === "half") ? item.priceHalf : item.priceFull;
+          const serves = (size === "half") ? item.servesHalf : item.servesFull;
+          subtotal += price * qty;
+          totalServings += serves * qty;
+        } else {
+          subtotal += item.priceFull * qty;
+          totalServings += (item.servesFull || 1) * qty;
+        }
       });
     }
-    const service=subtotal*0.2,total=subtotal+service,deposit=total*0.5;
-    subtotalEl.textContent=subtotal.toFixed(2);
-    serviceEl.textContent=service.toFixed(2);
-    totalEl.textContent=total.toFixed(2);
-    depositEl.textContent=deposit.toFixed(2);
-    estEl.textContent=servings;
+    const service = subtotal * 0.2;
+    const total = subtotal + service;
+    const deposit = total * 0.5;
+
+    subtotalEl.textContent = subtotal.toFixed(2);
+    serviceEl.textContent = service.toFixed(2);
+    totalEl.textContent = total.toFixed(2);
+    depositEl.textContent = deposit.toFixed(2);
+    estEl.textContent = totalServings;
   }
+
+  menuContainer.addEventListener('input', calculateTotals);
+  menuContainer.addEventListener('change', calculateTotals);
+
+  /* ---------------- Time Options ---------------- */
+  const startTime = document.getElementById("startTime");
+  const endTime = document.getElementById("endTime");
+  const eventTime = document.getElementById("eventTime");
+
+  function format12(h, m) {
+    const ampm = h >= 12 ? "PM" : "AM";
+    let hh = h % 12; if (hh === 0) hh = 12;
+    const mm = m.toString().padStart(2,"0");
+    return `${hh}:${mm} ${ampm}`;
+  }
+
+  function populateTimeSelect(select) {
+    if (!select) return;
+    for (let h=10; h<=21; h++){
+      for (let m=0; m<60; m+=30){
+        if (h===10 && m<30) continue;
+        if (h===21 && m>0) continue;
+        const option = document.createElement("option");
+        option.value = option.textContent = format12(h,m);
+        select.appendChild(option);
+      }
+    }
+  }
+
+  populateTimeSelect(startTime);
+  populateTimeSelect(endTime);
+  populateTimeSelect(eventTime);
+
+  /* ---------------- Event Date Min ---------------- */
+  (function ensureEventDate(){
+    let eventDate = document.getElementById('eventDate');
+    function setMinDate(){
+      const today = new Date();
+      const min = new Date(today.getFullYear(), today.getMonth(), today.getDate()+14);
+      if (eventDate) eventDate.min = min.toISOString().split("T")[0];
+    }
+    setMinDate();
+    try { setInterval(setMinDate, 6*60*60*1000); } catch(e){}
+  })();
+
+  /* ---------------- Pickup / Delivery ---------------- */
+  const pickupBtn = document.getElementById("togglePickup"),
+        deliveryBtn = document.getElementById("toggleDelivery"),
+        pickupInput = document.getElementById("pickupDeliveryInput"),
+        deliveryWrapper = document.getElementById("deliveryWrapper");
+
+  function setPickup() {
+    pickupBtn.classList.add('toggle-active'); pickupBtn.classList.remove('toggle-inactive');
+    deliveryBtn.classList.remove('toggle-active'); deliveryBtn.classList.add('toggle-inactive');
+    if (pickupInput) pickupInput.value = 'pickup';
+    if (deliveryWrapper) deliveryWrapper.style.display = 'none';
+    pickupBtn.setAttribute('aria-pressed','true'); pickupBtn.setAttribute('aria-checked','true');
+    deliveryBtn.setAttribute('aria-pressed','false'); deliveryBtn.setAttribute('aria-checked','false');
+  }
+  function setDelivery() {
+    deliveryBtn.classList.add('toggle-active'); deliveryBtn.classList.remove('toggle-inactive');
+    pickupBtn.classList.remove('toggle-active'); pickupBtn.classList.add('toggle-inactive');
+    if (pickupInput) pickupInput.value = 'delivery';
+    if (deliveryWrapper) deliveryWrapper.style.display = 'block';
+    pickupBtn.setAttribute('aria-pressed','false'); pickupBtn.setAttribute('aria-checked','false');
+    deliveryBtn.setAttribute('aria-pressed','true'); deliveryBtn.setAttribute('aria-checked','true');
+  }
+
+  pickupBtn?.addEventListener('click', setPickup);
+  deliveryBtn?.addEventListener('click', setDelivery);
+
+  /* ---------------- Contact Method ---------------- */
+  const contactMethod = document.getElementById('contactMethod');
+  const reachWrapper = document.getElementById('reachWrapper');
+  function updateContactMethodUI() {
+    if (!contactMethod) return;
+    const val = contactMethod.value;
+    if (val === 'phone') reachWrapper.style.display = 'block';
+    else reachWrapper.style.display = 'none';
+  }
+  contactMethod?.addEventListener('change', updateContactMethodUI);
+
+  /* ---------------- Validation ---------------- */
+  function showError(id, message) {
+    const el = document.getElementById('err-' + id);
+    if (el) { el.textContent = message; el.setAttribute('role','alert'); }
+  }
+  function clearError(id) {
+    const el = document.getElementById('err-' + id); if (el) el.textContent='';
+  }
+
+  const validators = {
+    name: ()=>{ const v = document.getElementById('name')?.value||''; if(v.trim().length<2){showError('name','Enter name'); return false;} clearError('name'); return true;},
+    email: ()=>{ const el=document.getElementById('email'); if(!el) return true; const v=el.value||''; if(!v||!el.checkValidity()){showError('email','Enter valid email'); return false;} clearError('email'); return true; },
+    phone: ()=>{ const v=document.getElementById('phone')?.value||''; if(!v.replace(/[^\d]/g,'')) {showError('phone','Enter phone'); return false;} clearError('phone'); return true;},
+    people: ()=>{ const v=document.getElementById('people')?.value||''; if(!v||Number(v)<1){showError('people','Enter number of people'); return false;} clearError('people'); return true; },
+    eventDate: ()=>{ const v=document.getElementById('eventDate')?.value||''; if(!v){showError('eventDate','Pick date'); return false;} clearError('eventDate'); return true;},
+    eventTime: ()=>{ const v=document.getElementById('eventTime')?.value||''; if(!v){showError('eventTime','Pick time'); return false;} clearError('eventTime'); return true;},
+    timeframe: ()=>{ if(contactMethod?.value==='phone'){ const s=document.getElementById('startTime')?.value||''; const e=document.getElementById('endTime')?.value||''; const days=[...document.querySelectorAll("input[name='confirmationDays']:checked")]; if(!days.length||!s||!e){showError('timeframe','Pick timeframe'); return false;} } clearError('timeframe'); return true;},
+    deliveryAddress: ()=>{ if(pickupInput?.value==='delivery'){ const v=document.getElementById('deliveryAddress')?.value||''; if(!v){showError('deliveryAddress','Enter address'); return false;} } clearError('deliveryAddress'); return true;}
+  };
+
+  ['name','email','phone','people','deliveryAddress'].forEach(id=>{document.getElementById(id)?.addEventListener('blur',validators[id]);});
+  document.getElementById('eventDate')?.addEventListener('change',validators.eventDate);
+  document.getElementById('eventTime')?.addEventListener('change',validators.eventTime);
+  document.getElementById('startTime')?.addEventListener('change',validators.timeframe);
+  document.getElementById('endTime')?.addEventListener('change',validators.timeframe);
+
 
   /* ---------------- Toast ---------------- */
   let toast=document.getElementById('form-toast');
