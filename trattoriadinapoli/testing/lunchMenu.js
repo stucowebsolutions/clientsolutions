@@ -14,8 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     container.innerHTML = ""; // remove skeleton
     renderLunchMenu(menu);
 
-    // Render category jump links
-    renderCategoryNav(Object.keys(menu));
   } catch (err) {
     console.error(err);
     container.innerHTML = "<p>Failed to load menu.</p>";
