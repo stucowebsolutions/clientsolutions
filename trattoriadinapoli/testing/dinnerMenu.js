@@ -1,16 +1,15 @@
 /* ============================
    Dinner Menu
-   ============================ */
+============================ */
 
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("menu");
 
-  // Initial skeletons for perceived load time
-  container.innerHTML = '<div class="skeleton skeleton-title"></div>'.repeat(5);
+  // Skeleton loader
+  container.innerHTML = '<div class="skeleton skeleton-title"></div>'.repeat(6);
 
   try {
     const menu = await fetchMenu("Dinner_Menu");
-
     container.innerHTML = "";
     renderDinnerMenu(menu);
   } catch (err) {
@@ -35,45 +34,42 @@ function renderDinnerItem(item) {
   const el = document.createElement("div");
   el.className = "menu-item dinner";
 
-  // Determine if this is a Protein Add-On header
-  const isProteinAddOn = item.itemName && item.itemName.toLowerCase().includes("protein add-on");
-
-  let descriptionHtml = "";
-
-  if (item.description) {
-    // Render protein options as separate lines if this is a protein add-on
-    if (isProteinAddOn) {
-      const lines = item.description.split("\n");
-      descriptionHtml = lines.map(line => `<div class="menu-item-description">${line.trim()}</div>`).join("");
-    } else {
-      descriptionHtml = `<div class="menu-item-description">${item.description}</div>`;
-    }
-  }
-
-  // Format price
-  let priceText = "";
-  if (item.price) {
-    priceText = formatPrice(item.price);
-  } else if (item.PriceFixed || item.PriceSmall || item.PriceLarge) {
-    // fallback for legacy fields
-    priceText = formatPrice({
-      small: item.PriceSmall,
-      large: item.PriceLarge,
-      fixed: item.PriceFixed
-    });
-  }
+  // Format price for half/full servings or single price
+  const priceText = formatPrice(item.price);
 
   el.innerHTML = `
     <div class="menu-item-header">
-      <span class="menu-item-name">${item.itemName ?? ""}</span>
+      <span class="menu-item-name">${item.itemName}</span>
       <span class="menu-item-price">${priceText}</span>
     </div>
 
     ${item.sizeLabel ? `<div class="menu-item-size">${item.sizeLabel}</div>` : ""}
-    ${item.servings ? `<div class="menu-item-servings">${formatServings(item.servings)}</div>` : ""}
+    ${item.servings.small || item.servings.large ? `<div class="menu-item-servings">${formatServings(item.servings)}</div>` : ""}
+    ${item.description ? `<div class="menu-item-description">${item.description}</div>` : ""}
     ${item.choice ? `<div class="menu-item-choice">${item.choice}</div>` : ""}
-    ${descriptionHtml}
   `;
+
+  // Render children (protein add-ons) if any
+  if (item.children && item.children.length) {
+    const childrenContainer = document.createElement("div");
+    childrenContainer.className = "menu-item-children";
+
+    item.children.forEach(child => {
+      const childEl = document.createElement("div");
+      childEl.className = "menu-item-child";
+
+      childEl.innerHTML = `
+        <span class="menu-item-name">${child.itemName}</span>
+        ${child.price ? `<span class="menu-item-price">${formatPrice(child.price)}</span>` : ""}
+        ${child.description ? `<div class="menu-item-description">${child.description}</div>` : ""}
+        ${child.choice ? `<div class="menu-item-choice">${child.choice}</div>` : ""}
+      `;
+
+      childrenContainer.appendChild(childEl);
+    });
+
+    el.appendChild(childrenContainer);
+  }
 
   return el;
 }
