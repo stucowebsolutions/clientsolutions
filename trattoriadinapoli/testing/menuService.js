@@ -28,13 +28,13 @@ async function fetchMenu(menuName) {
  * Uses dollar signs, no size labels
  */
 function formatPrice({ small, large, fixed }) {
-  if (fixed) return `$${fixed}`;
+  if (fixed) return `${fixed}`;
 
   if (small && large) {
-    return `$${small} / $${large}`;
+    return `${small} / ${large}`;
   }
 
-  if (small) return `$${small}`;
+  if (small) return `${small}`;
   return "";
 }
 
