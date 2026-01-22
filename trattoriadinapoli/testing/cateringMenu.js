@@ -5,6 +5,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const container = document.getElementById("menu");
 
+  // Skeleton loader
   container.innerHTML = '<div class="skeleton skeleton-title"></div>'.repeat(5);
 
   try {
@@ -12,9 +13,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     container.innerHTML = "";
     renderCateringMenu(menu);
-     }
-     
-  catch (err) {
+
+  } catch (err) {
     console.error(err);
     container.innerHTML = "<p>Failed to load menu.</p>";
   }
@@ -36,8 +36,20 @@ function renderCateringItem(item) {
   const el = document.createElement("div");
   el.className = "menu-item catering";
 
-  const priceText = formatPrice(item.price);
-  const servingsText = formatServings(item.servings);
+  /* ----------------------------
+     Catering-specific formatting
+  ----------------------------- */
+
+  const priceText = formatCateringPrice(item.price);
+
+  const hasPanServings =
+    item.servings &&
+    item.servings.small &&
+    item.servings.large;
+
+  const servingsText = hasPanServings
+    ? formatCateringServings(item.servings)
+    : "";
 
   el.innerHTML = `
     <div class="menu-item-header">
@@ -45,10 +57,21 @@ function renderCateringItem(item) {
       <span class="menu-item-price">${priceText}</span>
     </div>
 
-    ${item.sizeLabel ? `<div class="menu-item-size">${item.sizeLabel}</div>` : ""}
-    ${servingsText ? `<div class="menu-item-servings">${servingsText}</div>` : ""}
-    ${item.choice ? `<div class="menu-item-choice">${item.choice}</div>` : ""}
-    ${item.description ? `<div class="menu-item-description">${item.description}</div>` : ""}
+    ${item.sizeLabel
+      ? `<div class="menu-item-size">${item.sizeLabel}</div>`
+      : ""}
+
+    ${servingsText
+      ? `<div class="menu-item-servings">${servingsText}</div>`
+      : ""}
+
+    ${item.choice
+      ? `<div class="menu-item-choice">${item.choice}</div>`
+      : ""}
+
+    ${item.description
+      ? `<div class="menu-item-description">${item.description}</div>`
+      : ""}
   `;
 
   return el;
