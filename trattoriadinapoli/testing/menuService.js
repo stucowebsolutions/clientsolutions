@@ -3,7 +3,7 @@
    ============================ */
 
 const MENU_ENDPOINT =
-  "https://script.google.com/macros/s/AKfycbwXMbd0YpblLGWQ8W8KbVObTw715jz6TD4ug1b-FM-qo5q9v7LUZNU5p8wKdPw3z58/exec";
+  "https://script.google.com/macros/s/AKfycbxIg90APpk6fsZRSG_oivWSHXIW9G0fSkXeC43ZJCgAqpWCBeeCQNOAzpWRN2KCEWUh/exec";
 
 /**
  * Fetch menu data from GAS
