@@ -39,6 +39,7 @@ body {
   margin-bottom: 32px;
   border-bottom: 2px solid var(--border-light);
   padding-bottom: 16px;
+  text-align: center;
 }
 
 .menu-header h1 {
@@ -60,13 +61,12 @@ body {
 .menu-category {
   margin-bottom: 40px;
   scroll-margin-top: 80px;
-  border-bottom: 1px solid var(--border-light);
+  border-top: 1px solid var(--border-light);
 }
 
 .menu-category h2 {
   font-size: 2rem;
   font-weight: 300;
-  margin: auto;
   margin-bottom: 8px;
   border-bottom: 1px solid var(--border-light);
   padding-bottom: 6px;
@@ -75,7 +75,6 @@ body {
 .menu-category-description {
   color: var(--text-secondary);
   font-size: 1.5rem;
-  margin: auto;
   margin: 12px 0 24px;
 }
 
@@ -95,12 +94,12 @@ body {
 }
 
 .menu-item-name {
-  font-weight: 700;
+  font-weight: 200;
   font-size: 1.5rem;
 }
 
 .menu-item-price {
-  font-weight: 700;
+  font-weight: 500;
   font-size: 1.5rem;
   text-align: right;
   min-width: var(--price-width);
