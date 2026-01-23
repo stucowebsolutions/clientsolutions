@@ -39,18 +39,19 @@ body {
   margin-bottom: 32px;
   border-bottom: 2px solid var(--border-light);
   padding-bottom: 16px;
-  text-align: center;
 }
 
 .menu-header h1 {
   font-size: 3rem;
   font-weight: 500;
+  text-align: center;
   margin-bottom: 4px;
 }
 
 .menu-subtitle {
   color: var(--text-secondary);
   font-size: 1.5rem;
+  text-align: center;
 }
 
 
@@ -68,7 +69,6 @@ body {
   font-size: 2rem;
   font-weight: 300;
   margin-bottom: 8px;
-  border-bottom: 1px solid var(--border-light);
   padding-bottom: 6px;
 }
 
@@ -99,7 +99,7 @@ body {
 }
 
 .menu-item-price {
-  font-weight: 500;
+  font-weight: 300;
   font-size: 1.5rem;
   text-align: right;
   min-width: var(--price-width);
@@ -110,19 +110,19 @@ body {
 ========================= */
 
 .menu-item-servings {
-  font-size: 1rem;
+  font-size: 1.15rem;
   color: var(--text-secondary);
   margin-top: 4px;
 }
 
 .menu-item-description {
-  font-size: 1rem;
+  font-size: 1.15rem;
   color: var(--text-secondary);
   margin-top: 6px;
 }
 
 .menu-item-choices {
-  font-size: 1rem;
+  font-size: 1.15rem;
   color: var(--text-secondary);
   margin-top: 6px;
   font-style: italic;
