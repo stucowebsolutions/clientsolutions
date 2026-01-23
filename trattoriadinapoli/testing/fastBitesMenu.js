@@ -43,7 +43,7 @@ function renderFastBitesItem(item) {
     </div>
 
     ${item.choice ? `<div class="menu-item-choice">${item.choice}</div>` : ""}
-    ${item.description ? `<div class="menu-item-description">${item.description}</div>` : ""}
+    ${item.description ? `<div class="menu-item-description">${item.description.replace(/\n/g, "<br>")}</div>` : ""}
   `;
 
   return el;
