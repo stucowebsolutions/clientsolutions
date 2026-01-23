@@ -43,7 +43,7 @@ body {
 
 .menu-header h1 {
   font-size: 3rem;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 4px;
 }
 
@@ -60,11 +60,13 @@ body {
 .menu-category {
   margin-bottom: 40px;
   scroll-margin-top: 80px;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .menu-category h2 {
   font-size: 2rem;
-  font-weight: 700;
+  font-weight: 300;
+  margin: auto;
   margin-bottom: 8px;
   border-bottom: 1px solid var(--border-light);
   padding-bottom: 6px;
@@ -73,6 +75,7 @@ body {
 .menu-category-description {
   color: var(--text-secondary);
   font-size: 1.5rem;
+  margin: auto;
   margin: 12px 0 24px;
 }
 
