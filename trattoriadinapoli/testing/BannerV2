@@ -1,0 +1,149 @@
+<div id="daily-special-banner">
+  <div id="slide-track">
+    <span id="special-text"></span>
+    <span class="divider">•</span>
+    <span id="cta-text"></span>
+    <span class="divider">•</span>
+  </div>
+</div>
+
+<style>
+  /* === Brand Colors === */
+  :root {
+    --bg: #F5F5F5;         /* White Smoke */
+    --text: #141414;       /* Night Black */
+    --accent: #B1871B;     /* Dark Goldenrod */
+    --rosewood: #640214;   /* Rosewood */
+    --hover: #105200;      /* Cal Poly Green */
+
+    /* Italian Flag Colors */
+    --green: #009246;
+    --white: #ffffff;
+    --red: #ce2b37;
+  }
+
+  /* === Banner Container === */
+  #daily-special-banner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    position: relative;
+    height: 70px;
+    border-top: 5px solid var(--accent);
+    border-bottom: 5px solid var(--accent);
+    color: var(--text);
+
+    /* Animated Italian flag background */
+    background: linear-gradient(
+      90deg,
+      var(--green) 0%,
+      var(--green) 33%,
+      var(--white) 33%,
+      var(--white) 66%,
+      var(--red) 66%,
+      var(--red) 100%,
+      var(--green) 100%
+    );
+    background-size: 150% 100%;
+    animation: flagWave 18s linear infinite;
+  }
+
+  /* === Scrolling Track === */
+  #slide-track {
+    display: inline-block;
+    white-space: nowrap;
+    animation: slide-left 36s linear infinite;
+  }
+
+  /* === Messages === */
+  #slide-track span {
+    display: inline-block;
+    padding: 0 3rem;
+    vertical-align: middle;
+  }
+
+  #special-text {
+    color: var(--text);
+  }
+
+  #cta-text {
+    color: var(--text);
+  }
+
+  .divider {
+    color: var(--text);
+    font-weight: 400;
+    font-size: 1.8rem;
+  }
+
+  /* === Animation: Slide Left === */
+  @keyframes slide-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* === Animation: Italian Flag Wave === */
+  @keyframes flagWave {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 300% 0%;
+    }
+  }
+
+  /* === Optional Pause on Hover === */
+  #daily-special-banner:hover #slide-track {
+    animation-play-state: paused;
+  }
+
+  /* === Mobile Responsiveness === */
+  @media (max-width: 768px) {
+    #daily-special-banner {
+      font-size: 1.2rem;
+      height: 60px;
+    }
+
+    #slide-track span {
+      padding: 0 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const specials = {
+      0: "Sorry we're closed today. You can always use online resources for catering requests or reservations for when we're open though!",
+      1: "Sorry we're closed today. You can always use online resources for catering requests or reservations for when we're open though!",
+      2: "Join us for Veal Night! Enjoy your favorite pastas with delicious veal.",
+      3: "Join us for Pizza Night! Try our hand-tossed specialty pizza and wine pairings.",
+      4: "Join us for Steak Night! Juicy steaks cooked to perfection.",
+      5: "Come join us for dinner! Call us or use the link on our homepage to place a reservation.",
+      6: "Come join us for dinner! Call us or use the link on our homepage to place a reservation."
+    };
+
+    const today = new Date().getDay();
+    const dailySpecial = specials[today];
+    const marketingCTA = "Use the form at the bottom of our catering page to submit a request today!";
+
+    const track = document.getElementById("slide-track");
+    const specialEl = document.getElementById("special-text");
+    const ctaEl = document.getElementById("cta-text");
+
+    // Populate content
+    specialEl.textContent = dailySpecial;
+    ctaEl.textContent = marketingCTA;
+
+    // Duplicate full track to make loop seamless
+    track.innerHTML = track.innerHTML + track.innerHTML;
+  });
+</script>
