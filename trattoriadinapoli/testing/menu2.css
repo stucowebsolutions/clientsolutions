@@ -10,8 +10,6 @@
 
   --price-width: 120px;
   --max-content-width: 900px;
-
-  --skeleton-speed: 4s; /* Rolling pizza speed */
 }
 
 * {
@@ -61,6 +59,90 @@ body {
   font-size: 1.2rem;
   text-align: center;
 }
+/* =========================
+   Weeknight Specials
+========================= */
+
+.weeknight-specials {
+  margin: 16px 0 20px;
+  padding: 24px 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.weeknight-specials h2 {
+  font-size: 2rem;
+  text-align: center;
+  font-weight: 300;
+  margin-bottom: 24px;
+}
+
+/* Grid layout for desktop */
+.weeknight-specials .specials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.weeknight-specials .special {
+  padding-right: 16px;
+}
+
+.weeknight-specials .special:not(:last-child) {
+  border-right: 1px solid var(--border-light);
+}
+
+.weeknight-specials h3 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--accent);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weeknight-specials p {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.weeknight-specials strong {
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+/* Available tonight badge */
+.weeknight-specials .available-today {
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 2px 6px;
+  line-height: 1;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 768px) {
+  .weeknight-specials .specials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .weeknight-specials .special {
+    padding-right: 0;
+    padding-bottom: 16px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .weeknight-specials .special:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
 
 /* =========================
    Category Sections
@@ -91,13 +173,6 @@ body {
 
 .menu-item {
   margin-bottom: 24px;
-  padding: 8px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.menu-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .menu-item-header {
@@ -119,68 +194,97 @@ body {
   min-width: var(--price-width);
 }
 
-.menu-item-description,
-.menu-item-choices,
+/* =========================
+   Serving Info (Catering)
+========================= */
+
 .menu-item-servings {
   font-size: 1.15rem;
   color: var(--text-secondary);
   margin-top: 4px;
 }
 
-.menu-item-choices {
-  font-style: italic;
-}
-
-/* =========================
-   Images & Captions
-========================= */
-
-.menu-item-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-bottom: 4px;
-}
-
-.menu-item-caption {
-  font-size: 1rem;
+.menu-item-description {
+  font-size: 1.15rem;
   color: var(--text-secondary);
-  margin-bottom: 6px;
-  text-align: center;
+  margin-top: 6px;
+}
+
+.menu-item-choices {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  margin-top: 6px;
   font-style: italic;
 }
 
 /* Hide empty blocks */
 .menu-item-servings:empty,
 .menu-item-description:empty,
-.menu-item-choices:empty,
-.menu-item-caption:empty {
+.menu-item-choices:empty {
   display: none;
 }
 
 /* =========================
-   Skeleton Loader (Pizza)
+   Skeleton Loaders (Updated)
 ========================= */
 
 .menu-skeleton-wrapper {
   display: flex;
   gap: 12px;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
-  margin-bottom: 24px;
+  padding: 16px 0;
 }
 
 .skeleton-pizza {
   width: 48px;
   height: 48px;
   object-fit: contain;
-  animation: roll-pizza linear infinite;
+  animation: roll-pizza 2s linear infinite;
 }
 
 @keyframes roll-pizza {
-  0% { transform: translateX(-100%) rotate(0deg); }
-  100% { transform: translateX(100%) rotate(360deg); }
+  0% {
+    transform: translateX(-100%) rotate(0deg);
+  }
+  50% {
+    transform: translateX(100%) rotate(180deg);
+  }
+  100% {
+    transform: translateX(-100%) rotate(360deg);
+  }
+}
+
+/* =========================
+   Menu Item Images & Captions
+========================= */
+
+.menu-item-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  display: block;
+}
+
+.menu-item-caption {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  font-style: italic;
+  text-align: center;
+}
+
+/* =========================
+   Menu Item Hover Animation
+========================= */
+
+.menu-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 /* =========================
