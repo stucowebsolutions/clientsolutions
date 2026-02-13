@@ -1,0 +1,220 @@
+/* =========================
+   Base Reset & Variables
+========================= */
+
+:root {
+  --text-primary: #1f2933;
+  --text-secondary: #616e7c;
+  --border-light: #e4e7eb;
+  --accent: #8b1e1e;
+
+  --price-width: 120px;
+  --max-content-width: 900px;
+
+  --skeleton-speed: 4s; /* Rolling pizza speed */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Georgia", "Times New Roman", serif;
+  color: var(--text-primary);
+  line-height: 1.5;
+  background: #fff;
+}
+
+/* =========================
+   Page Layout
+========================= */
+
+.menu-page {
+  max-width: var(--max-content-width);
+  margin: auto;
+  padding: 24px 16px 48px;
+}
+
+.menu-header {
+  margin-bottom: 32px;
+  border-bottom: 2px solid var(--border-light);
+  padding-bottom: 16px;
+}
+
+.menu-header h1 {
+  font-size: 3rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.menu-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.menu-policy {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+/* =========================
+   Category Sections
+========================= */
+
+.menu-category {
+  margin-bottom: 40px;
+  scroll-margin-top: 80px;
+  border-top: 1px solid var(--border-light);
+}
+
+.menu-category h2 {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+}
+
+.menu-category-description {
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  margin: 12px 0 24px;
+}
+
+/* =========================
+   Menu Items
+========================= */
+
+.menu-item {
+  margin-bottom: 24px;
+  padding: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.menu-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.menu-item-name {
+  font-weight: 200;
+  font-size: 1.5rem;
+}
+
+.menu-item-price {
+  font-weight: 300;
+  font-size: 1.5rem;
+  text-align: right;
+  min-width: var(--price-width);
+}
+
+.menu-item-description,
+.menu-item-choices,
+.menu-item-servings {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.menu-item-choices {
+  font-style: italic;
+}
+
+/* =========================
+   Images & Captions
+========================= */
+
+.menu-item-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+
+.menu-item-caption {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* Hide empty blocks */
+.menu-item-servings:empty,
+.menu-item-description:empty,
+.menu-item-choices:empty,
+.menu-item-caption:empty {
+  display: none;
+}
+
+/* =========================
+   Skeleton Loader (Pizza)
+========================= */
+
+.menu-skeleton-wrapper {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.skeleton-pizza {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  animation: roll-pizza linear infinite;
+}
+
+@keyframes roll-pizza {
+  0% { transform: translateX(-100%) rotate(0deg); }
+  100% { transform: translateX(100%) rotate(360deg); }
+}
+
+/* =========================
+   Print / PDF Optimization
+========================= */
+
+@media print {
+  body {
+    color: #000;
+    background: #fff;
+  }
+
+  .menu-page {
+    padding: 0;
+  }
+
+  .menu-item {
+    break-inside: avoid;
+  }
+
+  .menu-category {
+    page-break-inside: avoid;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+/* =========================
+   Utility / Alignment
+========================= */
+
+.text-right {
+  text-align: right;
+}
