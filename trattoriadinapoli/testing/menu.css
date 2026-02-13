@@ -54,6 +54,95 @@ body {
   text-align: center;
 }
 
+.menu-policy {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  text-align: center;
+}
+/* =========================
+   Weeknight Specials
+========================= */
+
+.weeknight-specials {
+  margin: 16px 0 20px;
+  padding: 24px 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.weeknight-specials h2 {
+  font-size: 2rem;
+  text-align: center;
+  font-weight: 300;
+  margin-bottom: 24px;
+}
+
+/* Grid layout for desktop */
+.weeknight-specials .specials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.weeknight-specials .special {
+  padding-right: 16px;
+}
+
+.weeknight-specials .special:not(:last-child) {
+  border-right: 1px solid var(--border-light);
+}
+
+.weeknight-specials h3 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--accent);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weeknight-specials p {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.weeknight-specials strong {
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+/* Available tonight badge */
+.weeknight-specials .available-today {
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 2px 6px;
+  line-height: 1;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 768px) {
+  .weeknight-specials .specials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .weeknight-specials .special {
+    padding-right: 0;
+    padding-bottom: 16px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .weeknight-specials .special:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
 
 /* =========================
    Category Sections
@@ -67,7 +156,7 @@ body {
 
 .menu-category h2 {
   font-size: 2rem;
-  font-weight: 300;
+  font-weight: 400;
   margin-bottom: 8px;
   padding-bottom: 6px;
 }
