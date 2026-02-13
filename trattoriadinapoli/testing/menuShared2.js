@@ -19,7 +19,7 @@ function renderSkeletonLoader(count = 6) {
 
   for (let i = 0; i < count; i++) {
     const img = document.createElement("img");
-    img.src = "https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/images/skeleton-pizza.png";
+    img.src = "https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/testing/Circle.jpg";
     img.className = "skeleton-pizza";
     wrapper.appendChild(img);
   }
