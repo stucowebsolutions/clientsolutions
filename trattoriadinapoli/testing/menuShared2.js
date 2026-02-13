@@ -56,7 +56,7 @@ function renderMenuItem(item, isCatering = false) {
   const servings = isCatering ? formatCateringServings(item.servings) : "";
 
   const imgTag = item.imageName
-    ? `<img class="menu-item-image" src="https://drive.google.com/uc?export=view&id=${item.imageName}" alt="${item.itemName}">`
+    ? `<img class="menu-item-image" src="https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/testing/${item.imageName}" alt="${item.itemName}">`
     : "";
 
   const caption = item.imageCaption ? `<div class="menu-item-caption">${item.imageCaption}</div>` : "";
