@@ -61,7 +61,12 @@ function renderMenuItem(item, isCatering = false) {
     <div class="menu-item-header">
       <span class="menu-item-name">
         ${item.itemName}
-        ${hasImage ? `<span class="menu-item-icon" aria-label="View Image">📷</span>` : ""}
+        ${hasImage ? `<span class="menu-item-icon">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 5c-3.866 0-7 3.134-7 7s3.134 7 7 7 7-3.134 7-7-3.134-7-7-7zm0 12c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5zm8-12h-3.17l-1.84-2h-6l-1.84 2h-3.17c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-12c0-1.1-.9-2-2-2z"/>
+  </svg>
+</span>
+` : ""}
       </span>
       <span class="menu-item-price">${price}</span>
     </div>
