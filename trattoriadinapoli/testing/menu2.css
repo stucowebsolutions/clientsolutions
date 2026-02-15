@@ -273,6 +273,46 @@ body {
   font-style: italic;
   text-align: center;
 }
+/* =========================
+   Image Toggle Icon
+========================= */
+
+.menu-item-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.menu-item-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.menu-item-icon:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* =========================
+   Expandable Image Wrapper
+========================= */
+
+.menu-item-image-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
+
+}
+
+.menu-item.expanded .menu-item-image-wrapper {
+  max-height: 600px; /* safe max */
+  opacity: 1;
+  margin-top: 10px;
+}
 
 /* =========================
    Menu Item Hover Animation
