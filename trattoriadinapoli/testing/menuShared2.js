@@ -55,27 +55,40 @@ function renderMenuItem(item, isCatering = false) {
   const price = isCatering ? formatCateringPrice(item.price) : formatPrice(item.price);
   const servings = isCatering ? formatCateringServings(item.servings) : "";
 
-  const imgTag = item.image
-    ? `<img class="menu-item-image" src="${item.image}" alt="${item.itemName}">`
-    : "";
-
-
-  const caption = item.imageCaption ? `<div class="menu-item-caption">${item.imageCaption}</div>` : "";
+  const hasImage = !!item.image;
 
   el.innerHTML = `
-    ${imgTag}
-    ${caption}
     <div class="menu-item-header">
-      <span class="menu-item-name">${item.itemName}</span>
+      <span class="menu-item-name">
+        ${item.itemName}
+        ${hasImage ? `<span class="menu-item-icon" aria-label="View Image">📷</span>` : ""}
+      </span>
       <span class="menu-item-price">${price}</span>
     </div>
+
     ${item.choice ? `<div class="menu-item-choice">${item.choice}</div>` : ""}
     ${item.description ? `<div class="menu-item-description">${item.description.replace(/\n/g, "<br>")}</div>` : ""}
     ${servings ? `<div class="menu-item-servings">${servings}</div>` : ""}
+
+    ${hasImage ? `
+      <div class="menu-item-image-wrapper">
+        <img class="menu-item-image" src="${item.image}" alt="${item.itemName}">
+        ${item.imageCaption ? `<div class="menu-item-caption">${item.imageCaption}</div>` : ""}
+      </div>
+    ` : ""}
   `;
+
+  if (hasImage) {
+    const icon = el.querySelector(".menu-item-icon");
+    icon.addEventListener("click", (e) => {
+      e.stopPropagation(); // prevent bubbling
+      el.classList.toggle("expanded");
+    });
+  }
 
   return el;
 }
+
 
 /* -------- Render Full Menu -------- */
 function renderMenu(menu, container, options = { isCatering: false }) {
