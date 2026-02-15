@@ -55,9 +55,10 @@ function renderMenuItem(item, isCatering = false) {
   const price = isCatering ? formatCateringPrice(item.price) : formatPrice(item.price);
   const servings = isCatering ? formatCateringServings(item.servings) : "";
 
-  const imgTag = item.imageName
-    ? `<img class="menu-item-image" src="https://stucowebsolutions.github.io/clientsolutions/trattoriadinapoli/testing/${item.imageName}" alt="${item.itemName}">`
+  const imgTag = item.image
+    ? `<img class="menu-item-image" src="${item.image}" alt="${item.itemName}">`
     : "";
+
 
   const caption = item.imageCaption ? `<div class="menu-item-caption">${item.imageCaption}</div>` : "";
 
@@ -85,17 +86,18 @@ function renderMenu(menu, container, options = { isCatering: false }) {
 }
 
 /* -------- Price Formatters -------- */
-function formatPrice({ small, large, fixed }) {
+function formatPrice({ a, b, fixed }) {
   if (fixed) return `${fixed}`;
-  if (small && large) return `${small} / ${large}`;
-  if (small) return `${small}`;
+  if (a && b) return `${a} / ${b}`;
+  if (a) return `${a}`;
   return "";
 }
 
-function formatCateringPrice({ small, large, fixed }) {
+
+function formatCateringPrice({ a, b, fixed }) {
   if (fixed) return `${fixed}`;
-  if (small && large) return `${small}(Half) / ${large}(Full)`;
-  if (small) return `${small}`;
+  if (a && b) return `${a}(Half) / ${b}(Full)`;
+  if (a) return `${a}`;
   return "";
 }
 
