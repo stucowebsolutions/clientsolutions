@@ -136,23 +136,22 @@ function initMenuModal(menuPage) {
   const content = modal.querySelector(".menu-modal-content");
   const img = modal.querySelector(".menu-modal-image");
   const caption = modal.querySelector(".menu-modal-caption");
-  
+
   function openModal(src, cap, menuItem) {
     img.src = src;
     caption.textContent = cap || "";
-  
+
     // Compute vertical position relative to menuPage
     const rect = menuItem.getBoundingClientRect();
     const pageRect = menuPage.getBoundingClientRect();
     const top = rect.top - pageRect.top + menuPage.scrollTop;
-  
-    content.style.top = `${top}px`;   // vertical position
-    content.style.left = '';           // reset left to allow flex centering
-  
+
+    content.style.top = `${top}px`; // vertical position
+    content.style.left = '';         // allow flex centering
+
     modal.classList.add("active");
     menuPage.classList.add("modal-open");
   }
-
 
   function closeModal() {
     modal.classList.remove("active");
@@ -160,16 +159,27 @@ function initMenuModal(menuPage) {
     img.classList.remove("zoomed");
   }
 
-  // Close by clicking overlay
+  // --------------------
+  // Overlay click closes modal
+  // --------------------
   overlay.addEventListener("click", closeModal);
 
-  // Zoom on image click
+  // --------------------
+  // Prevent content click from closing
+  // --------------------
+  content.addEventListener("click", e => e.stopPropagation());
+
+  // --------------------
+  // Zoom in/out
+  // --------------------
   img.addEventListener("click", e => {
     e.stopPropagation();
     img.classList.toggle("zoomed");
   });
 
-  // Swipe down to close
+  // --------------------
+  // Swipe down to close (mobile)
+  // --------------------
   let startY = 0;
   content.addEventListener("touchstart", e => {
     startY = e.touches[0].clientY;
@@ -180,7 +190,9 @@ function initMenuModal(menuPage) {
     if (delta > 100) closeModal();
   });
 
-  // Delegated icon click
+  // --------------------
+  // Delegated icon clicks
+  // --------------------
   menuPage.addEventListener("click", e => {
     const icon = e.target.closest(".menu-item-icon");
     if (!icon) return;
@@ -189,6 +201,7 @@ function initMenuModal(menuPage) {
     openModal(icon.dataset.image, icon.dataset.caption, icon.closest(".menu-item"));
   });
 }
+
 
 /* =========================
    Price Formatters
