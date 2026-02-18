@@ -137,12 +137,21 @@ function initMenuModal(menuPage) {
   const img = modal.querySelector(".menu-modal-image");
   const caption = modal.querySelector(".menu-modal-caption");
 
-  function openModal(src, cap) {
-    img.src = src;
-    caption.textContent = cap || "";
-    modal.classList.add("active");
-    menuPage.classList.add("modal-open");
-  }
+  function openModal(src, cap, menuItem) {
+  img.src = src;
+  caption.textContent = cap || "";
+  
+  // Get menuItem position relative to menuPage
+  const rect = menuItem.getBoundingClientRect();
+  const pageRect = menuPage.getBoundingClientRect();
+  
+  const top = rect.top - pageRect.top + menuPage.scrollTop; // menuPage-relative top
+  
+  const content = modal.querySelector(".menu-modal-content");
+  content.style.top = `${top}px`;
+  
+  modal.classList.add("active");
+}
 
   function closeModal() {
     modal.classList.remove("active");
@@ -174,7 +183,7 @@ function initMenuModal(menuPage) {
     if (!icon) return;
 
     e.stopPropagation();
-    openModal(icon.dataset.image, icon.dataset.caption);
+    openModal(icon.dataset.image, icon.dataset.caption, icon.closest(".menu-item"));
   });
 }
 
