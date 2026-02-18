@@ -117,8 +117,8 @@ function renderMenu(menu, container, options = { isCatering: false }) {
 /* =========================
    Modal Logic (Scoped to menu-page)
 ========================= */
+
 function initMenuModal(menuPage) {
-  // Create modal container
   const modal = document.createElement("div");
   modal.className = "menu-modal";
 
@@ -136,35 +136,40 @@ function initMenuModal(menuPage) {
   const content = modal.querySelector(".menu-modal-content");
   const img = modal.querySelector(".menu-modal-image");
   const caption = modal.querySelector(".menu-modal-caption");
-
-  // Open modal function
-  function openModal(src, cap) {
+  
+  function openModal(src, cap, menuItem) {
     img.src = src;
     caption.textContent = cap || "";
+  
+    // Compute vertical position relative to menuPage
+    const rect = menuItem.getBoundingClientRect();
+    const pageRect = menuPage.getBoundingClientRect();
+    const top = rect.top - pageRect.top + menuPage.scrollTop;
+  
+    content.style.top = `${top}px`;   // vertical position
+    content.style.left = '';           // reset left to allow flex centering
+  
     modal.classList.add("active");
     menuPage.classList.add("modal-open");
   }
 
-  // Close modal function
+
   function closeModal() {
     modal.classList.remove("active");
     menuPage.classList.remove("modal-open");
     img.classList.remove("zoomed");
   }
 
-  // Clicking on overlay closes modal
+  // Close by clicking overlay
   overlay.addEventListener("click", closeModal);
 
-  // Prevent clicks inside modal content from closing
-  content.addEventListener("click", e => e.stopPropagation());
-
-  // Zoom in/out image on click
+  // Zoom on image click
   img.addEventListener("click", e => {
     e.stopPropagation();
     img.classList.toggle("zoomed");
   });
 
-  // Swipe down to close (mobile)
+  // Swipe down to close
   let startY = 0;
   content.addEventListener("touchstart", e => {
     startY = e.touches[0].clientY;
@@ -175,15 +180,15 @@ function initMenuModal(menuPage) {
     if (delta > 100) closeModal();
   });
 
-  // Delegated click for menu item icons
+  // Delegated icon click
   menuPage.addEventListener("click", e => {
     const icon = e.target.closest(".menu-item-icon");
     if (!icon) return;
+
     e.stopPropagation();
-    openModal(icon.dataset.image, icon.dataset.caption);
+    openModal(icon.dataset.image, icon.dataset.caption, icon.closest(".menu-item"));
   });
 }
-
 
 /* =========================
    Price Formatters
