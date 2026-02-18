@@ -257,8 +257,8 @@ body {
 }
 
 .menu-item-icon svg {
-  width: 16px;
-  height: 16px;
+  width: 32px;
+  height: 32px;
 }
 
 .menu-item-icon:hover {
@@ -313,14 +313,17 @@ body {
 }
 
 .menu-modal {
-  position: absolute; /* absolute inside menu-page */
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: auto; 
+  height: auto;
   pointer-events: none;
   opacity: 0;
   z-index: 9999;
+  display: flex;            /* <-- enable flex centering */
+  justify-content: center;   /* horizontally center content */
+  pointer-events: none;
   transition: opacity 0.3s ease;
 }
 
@@ -334,10 +337,11 @@ body {
   inset: 0;
   background: rgba(0,0,0,0.4);
   cursor: pointer;
+  z-index: 1;               /* behind content */
 }
 
 .menu-modal-content {
-  position: absolute; /* absolute relative to menu-page */
+  position: absolute;       /* vertical position controlled via top */
   z-index: 2;
   max-width: 90%;
   max-height: 85vh;
