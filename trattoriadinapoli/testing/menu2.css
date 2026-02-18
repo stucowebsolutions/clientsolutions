@@ -303,31 +303,34 @@ body {
 }
 
 /* =========================
-   Scoped Modal (menu-page only)
+   Scoped Floating Modal
 ========================= */
-
-.menu-page {
-  position: relative;
-}
 
 .menu-page.modal-open {
   overflow: hidden;
 }
 
+/* Blur only menu content */
 .menu-page.modal-open > *:not(.menu-modal) {
   filter: blur(4px);
   transition: filter 0.3s ease;
 }
 
 .menu-modal {
-  position: absolute;
-  inset: 0;
+  position: fixed; /* THIS is the fix */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
   display: flex;
   align-items: center;
   justify-content: center;
+
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+  z-index: 9999;
 }
 
 .menu-modal.active {
@@ -345,7 +348,7 @@ body {
   position: relative;
   z-index: 2;
   max-width: 90%;
-  max-height: 85%;
+  max-height: 85vh;
   transform: scale(0.9);
   transition: transform 0.3s ease;
 }
