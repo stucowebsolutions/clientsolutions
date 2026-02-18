@@ -225,36 +225,6 @@ body {
 }
 
 /* =========================
-   Skeleton Loaders (Updated)
-========================= */
-
-.menu-skeleton-wrapper {
-  display: flex;
-  gap: 12px;
-  overflow: hidden;
-  padding: 16px 0;
-}
-
-.skeleton-pizza {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-  animation: roll-pizza 2s linear infinite;
-}
-
-@keyframes roll-pizza {
-  0% {
-    transform: translateX(-100%) rotate(0deg);
-  }
-  50% {
-    transform: translateX(100%) rotate(180deg);
-  }
-  100% {
-    transform: translateX(-100%) rotate(360deg);
-  }
-}
-
-/* =========================
    Menu Item Images & Captions
 ========================= */
 
@@ -297,21 +267,110 @@ body {
 }
 
 /* =========================
-   Expandable Image Wrapper
+   Rolling Pizza Loader (4s)
 ========================= */
 
-.menu-item-image-wrapper {
-  max-height: 0;
+.menu-skeleton-wrapper {
+  position: relative;
+  height: 180px;
   overflow: hidden;
-  opacity: 0;
-  transition: max-height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s ease;
-
 }
 
-.menu-item.expanded .menu-item-image-wrapper {
-  max-height: 600px; /* safe max */
+.skeleton-pizza {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  position: absolute;
+  top: -160px;
+  left: -160px;
+  animation: pizza-roll 4s linear forwards;
+}
+
+@keyframes pizza-roll {
+  0% {
+    top: -160px;
+    left: -160px;
+    transform: rotate(0deg);
+  }
+  20% {
+    top: 20px;
+  }
+  100% {
+    left: 110%;
+    top: 20px;
+    transform: rotate(720deg);
+  }
+}
+
+/* =========================
+   Scoped Modal (menu-page only)
+========================= */
+
+.menu-page {
+  position: relative;
+}
+
+.menu-page.modal-open {
+  overflow: hidden;
+}
+
+.menu-page.modal-open > *:not(.menu-modal) {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
+}
+
+.menu-modal {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.menu-modal.active {
   opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+}
+
+.menu-modal-content {
+  position: relative;
+  z-index: 2;
+  max-width: 90%;
+  max-height: 85%;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.menu-modal.active .menu-modal-content {
+  transform: scale(1);
+}
+
+.menu-modal-image {
+  max-width: 100%;
+  max-height: 75vh;
+  border-radius: 8px;
+  cursor: zoom-in;
+  transition: transform 0.3s ease;
+}
+
+.menu-modal-image.zoomed {
+  transform: scale(1.25);
+  cursor: zoom-out;
+}
+
+.menu-modal-caption {
   margin-top: 10px;
+  text-align: center;
+  color: #fff;
 }
 
 /* =========================
