@@ -136,21 +136,23 @@ function initMenuModal(menuPage) {
   const content = modal.querySelector(".menu-modal-content");
   const img = modal.querySelector(".menu-modal-image");
   const caption = modal.querySelector(".menu-modal-caption");
-
+  
   function openModal(src, cap, menuItem) {
     img.src = src;
     caption.textContent = cap || "";
-
-    // Compute position relative to menuPage
+  
+    // Compute vertical position relative to menuPage
     const rect = menuItem.getBoundingClientRect();
     const pageRect = menuPage.getBoundingClientRect();
     const top = rect.top - pageRect.top + menuPage.scrollTop;
-
-    content.style.top = `${top}px`;
-
+  
+    content.style.top = `${top}px`;   // vertical position
+    content.style.left = '';           // reset left to allow flex centering
+  
     modal.classList.add("active");
     menuPage.classList.add("modal-open");
   }
+
 
   function closeModal() {
     modal.classList.remove("active");
