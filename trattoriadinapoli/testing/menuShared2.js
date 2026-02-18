@@ -64,7 +64,7 @@ function renderCategoryHeader(title, description) {
 }
 
 /* =========================
-   Render Item (Modal Version)
+   Render Menu Item
 ========================= */
 
 function renderMenuItem(item, isCatering = false) {
@@ -138,20 +138,19 @@ function initMenuModal(menuPage) {
   const caption = modal.querySelector(".menu-modal-caption");
 
   function openModal(src, cap, menuItem) {
-  img.src = src;
-  caption.textContent = cap || "";
-  
-  // Get menuItem position relative to menuPage
-  const rect = menuItem.getBoundingClientRect();
-  const pageRect = menuPage.getBoundingClientRect();
-  
-  const top = rect.top - pageRect.top + menuPage.scrollTop; // menuPage-relative top
-  
-  const content = modal.querySelector(".menu-modal-content");
-  content.style.top = `${top}px`;
-  
-  modal.classList.add("active");
-}
+    img.src = src;
+    caption.textContent = cap || "";
+
+    // Compute position relative to menuPage
+    const rect = menuItem.getBoundingClientRect();
+    const pageRect = menuPage.getBoundingClientRect();
+    const top = rect.top - pageRect.top + menuPage.scrollTop;
+
+    content.style.top = `${top}px`;
+
+    modal.classList.add("active");
+    menuPage.classList.add("modal-open");
+  }
 
   function closeModal() {
     modal.classList.remove("active");
@@ -159,14 +158,16 @@ function initMenuModal(menuPage) {
     img.classList.remove("zoomed");
   }
 
+  // Close by clicking overlay
   overlay.addEventListener("click", closeModal);
 
+  // Zoom on image click
   img.addEventListener("click", e => {
     e.stopPropagation();
     img.classList.toggle("zoomed");
   });
 
-  // Swipe down close
+  // Swipe down to close
   let startY = 0;
   content.addEventListener("touchstart", e => {
     startY = e.touches[0].clientY;
