@@ -306,43 +306,38 @@ body {
    Scoped Floating Modal
 ========================= */
 
-.menu-page.modal-open {
-  overflow: hidden;
-}
-
-/* Blur only menu content */
+/* When modal is open, blur background */
 .menu-page.modal-open > *:not(.menu-modal) {
   filter: blur(4px);
   transition: filter 0.3s ease;
 }
 
 .menu-modal {
-  position: absolute; /* changed from fixed */
+  position: absolute; /* absolute inside menu-page */
   top: 0;
   left: 0;
   width: 100%;
-  height: auto; /* height now adjusts to content */
-  display: flex;
-  justify-content: center;
-  opacity: 0;
+  height: auto; 
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  opacity: 0;
   z-index: 9999;
+  transition: opacity 0.3s ease;
 }
 
 .menu-modal.active {
-  opacity: 1;
   pointer-events: auto;
+  opacity: 1;
 }
 
 .menu-modal-overlay {
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.4);
+  cursor: pointer;
 }
 
 .menu-modal-content {
-  position: absolute; /* absolute relative to .menu-page */
+  position: absolute; /* absolute relative to menu-page */
   z-index: 2;
   max-width: 90%;
   max-height: 85vh;
